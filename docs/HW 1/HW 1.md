@@ -115,7 +115,7 @@ Data Engineer занимается обновлением данных об уч
 
 ### USE CASE Diagram
 На диаграмме в целях краткости отображены только основные с точки зрения проектирования шаги сценариев использования. 
-[plot](https://github.com/yunas-x/Diploma/blob/Main/docs/HW%201/SSAD.png)
+![plot](https://github.com/yunas-x/Diploma/blob/Main/docs/HW%201/SSAD.png)
 
 ## Характеристики системы (Нефункциональные требования)
 <b> Х-1: Доступность (У-1, У-5) </b> <br>
