@@ -9,3 +9,5 @@
 ![plot](https://github.com/yunas-x/Diploma/blob/Snapshot-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-1.png)
 
 ## Component Diagram
+Ниже представлена диграмма компонентов для чат-бота и ML-сервиса.
+![plot](https://github.com/yunas-x/Diploma/blob/Snapshot-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-2.png)
