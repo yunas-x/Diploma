@@ -2,12 +2,14 @@
 Далее представлены модели программной системы в нотации 4С, однако будут описаны только верхние три уровня (без уровня кода)
 
 ## Context Diagram
-![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-2/Lab%20Work%20%E2%84%962/docs/SSAD%202.png)
+![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-1.png)
 
 ## Container Diagram
 Архитектура клиент-серверная для обеспечения возможности масштабирования. Базы данных развертываются в одних и тех же контейнерах с бэкэндом, так как транзакции не планируется, то требования к консистентности данных понижены. Система приближена к микросервисной с делением по функциональному признаку (так как требуется возможность расширения ML-сервиса путем репликации в сезон пиковой нагрузки), такая конструкция также позволяет обновлять данные и переобучать модель поочереди на каждой реплике. для распределения нагрузки используем API Gateaway с возможностью кэширования, на этапе прототипа данный контейнер можно опустить, соединив UI и бэкэнд напрямую.
-![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-1.png)
+![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-2.png)
 
 ## Component Diagram
 Ниже представлена диграмма компонентов для чат-бота и ML-сервиса.
-![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-2.1.png)
+![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-3.png)
+![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-4.png)
+![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-5.png)
