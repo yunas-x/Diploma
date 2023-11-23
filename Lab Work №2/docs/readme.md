@@ -10,4 +10,4 @@
 
 ## Component Diagram
 Ниже представлена диграмма компонентов для чат-бота и ML-сервиса.
-![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-2.png)
+![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-2.1.png)
