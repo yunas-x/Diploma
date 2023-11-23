@@ -10,9 +10,9 @@
 
 ## Component Diagram
 Ниже представлена диграмма компонентов для ETL, чат-бота и ML-сервиса.
-### ML-сервис
+## ML-сервис
 ![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-3.png)
-### Чат-бот
+## Чат-бот
 ![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-4.png)
-### ETL для парсинга учебных планов
+## ETL для парсинга учебных планов
 ![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-2/Lab%20Work%20%E2%84%962/docs/SSAD%202-5.png)
