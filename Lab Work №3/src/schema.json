@@ -1,0 +1,201 @@
+ {
+  "type": "object",
+  "required": ["ProgramInfo"],
+  "properties": {
+    "ProgramInfo": {
+      "type": "object",
+      "properties": {
+        "name": { 
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 150
+        },
+        "specialities": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "$ref":"#/$defs/speciality"
+          }
+        },
+        "degree": {
+          "$ref":"#/$defs/degree"
+        },
+        "university": {
+          "$ref":"#/$defs/university"
+        },
+        "yearEnrolled": { 
+          "type": "integer",
+          "minimum": 2000,
+          "maximum": 2050
+        },
+        "allCompetences": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/competence"
+          }
+        },
+        "courses": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/course"
+          }
+        }
+      },
+      "required": ["name", "specialities", "degree", "university", "yearEnrolled", "allCompetences", "courses"]
+    }
+  },
+  "$defs": {
+    "course": { 
+      "type": "object",
+      "required": ["name", "type", "credits", "classroomHours", "year", "competences"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 50
+        },
+        "type": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 50
+        },
+        "credits": {
+          "type": "integer",
+          "minimum": 1,
+          "exclusiveMaximum": 60
+        },
+        "classroomHours": {
+          "type": "integer",
+          "minimum": 1,
+          "exclusiveMaximum": 1000
+        },
+        "year": {
+          "type": "integer",
+          "minimum": 1,
+          "exclusiveMaximum": 6
+        },
+        "comments": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "type": "string"
+          }
+        },
+        "competences": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/competence"
+          }
+        },
+        "readBy": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 50
+        }
+      }
+    },
+    "competence": {
+      "type": "object",
+      "required": ["code", "name", "type", "content"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 10
+        },
+        "name": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 200
+        },
+        "type": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 50
+        },
+        "content": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 50
+        }
+      } 
+    },
+    "speciality": {
+      "type": "object",
+      "required": ["group", "code", "name"],
+      "properties": {
+        "group": {
+          "$ref": "#/$defs/group"
+        },
+        "code": { 
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 8
+        },
+        "name": { 
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100
+        }
+      }
+    },
+    "group": {
+      "type": "object",
+      "required": ["code", "name"],
+      "properties": { 
+        "code": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 60
+        },
+        "name": { 
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100
+        } 
+      }
+    },
+    "degree": {
+      "type": "object",
+      "required": ["code", "degreeName"],
+      "properties": { 
+        "code": { 
+          "type": "integer",
+          "minimum": 2,
+          "exclusiveMaximum": 8
+        }, 
+        "degreeName": { 
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 30
+        } 
+      }
+    },
+    "university": {
+      "type": "object",
+      "required": ["name", "city", "faculty"],
+      "properties": {
+        "name": { 
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 200
+        },
+        "city": {
+           "type": "string",
+           "minLength": 5,
+           "maxLength": 50
+        },
+        "faculty": { 
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 100
+        }
+      }
+    }
+  }
+}
