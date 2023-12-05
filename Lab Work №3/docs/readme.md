@@ -28,4 +28,4 @@
 | Speciality | Специальность | В данной таблице указаны направления подготовки, соответствующие программе |
 | Course | Учебная дисциплина | В данной таблице содержится информация о курсах, которые реализуются на программе |
 
-![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-3/Lab%20Work%20%E2%84%963/docs/DW.png)
+![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-3/Lab%20Work%20%E2%84%963/docs/DWH.png)
