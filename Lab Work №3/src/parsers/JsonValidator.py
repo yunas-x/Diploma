@@ -1,5 +1,5 @@
 import jsonschema
-from mixins.InitFromFileMeta import InitFromFile
+from mixins.InitFromFileMixin import InitFromFile
 
 from protocols.ValidatorProtocol import ValidatorProtocol
 
