@@ -4,7 +4,7 @@ from pathlib import Path
 class InitFromJson:
     
     @classmethod  
-    def from_json(cls, path: Path, *args, **kwargs):
+    def from_json(cls, path: Path, **kwargs):
         """Initiate object from file
         The class must define the initializer 
         where loaded object should be the first parameter
@@ -16,4 +16,4 @@ class InitFromJson:
         with open(path, "r") as file:
             obj: dict = json.load(file)
         
-        return cls(obj, *args, **kwargs)
+        return cls(obj, **kwargs)
