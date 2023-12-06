@@ -8,7 +8,7 @@ class InitFromJson():
         """Initiate schema from file
 
         Args:
-            path (Path): path to Json-schema
+            path (Path): path to Json
         """
         
         with open(path, "r") as file:
