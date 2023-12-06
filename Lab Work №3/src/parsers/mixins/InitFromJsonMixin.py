@@ -4,8 +4,8 @@ from pathlib import Path
 class InitFromJson():
     
     @classmethod  
-    def from_json(cls, path: Path):
-        """Initiate schema from file
+    def from_json(cls, path: Path, **kwargs):
+        """Initiate object from file
 
         Args:
             path (Path): path to Json
@@ -14,4 +14,4 @@ class InitFromJson():
         with open(path, "r") as file:
             schema = json.load(file)
         
-        return cls(schema=schema)
+        return cls(schema=schema, kwargs)
