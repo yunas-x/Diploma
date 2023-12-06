@@ -4,7 +4,7 @@ from parsers.protocols.ParserProtocol import ParserProtocol
 class ParserFactory:
     """Parser Factory to resolve a parser based on their properties"""
     
-    parsers = {
+    _parsers = {
         "hse": {
             "basic": {
                 "table": BasicParser
@@ -30,4 +30,4 @@ class ParserFactory:
         Returns:
             ParserProtocol: A parser if exists, otherwise shall throw KeyError exception
         """
-        return ParserFactory.parsers[university][plan_type][data_type]
+        return ParserFactory._parsers[university][plan_type][data_type]
