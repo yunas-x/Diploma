@@ -1,10 +1,10 @@
 import json
 from pathlib import Path
 
-class InitFromFile():
+class InitFromJson():
     
     @classmethod  
-    def from_file(cls, path: Path):
+    def from_json(cls, path: Path):
         """Initiate schema from file
 
         Args:
