@@ -6,7 +6,7 @@ from protocols.ValidatorProtocol import ValidatorProtocol
 class JsonValidator(ValidatorProtocol, InitFromFile):
     """Validates json file against the schema provided"""
     
-    def __init__(self, schema: dict):
+    def __init__(self, schema: dict, **kwargs):
         self.schema = schema
     
     def validate(self, data: dict, schema: dict=None) -> bool:
