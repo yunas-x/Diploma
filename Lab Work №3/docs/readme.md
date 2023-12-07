@@ -25,7 +25,7 @@
 ![plot](https://github.com/yunas-x/Diploma/blob/Lab-Work-3/Lab%20Work%20%E2%84%963/docs/DW.png)
 
 ## Применение основных принципов разработки
-[Описаны здесь](.src/readme.md)
+[Описаны здесь](../src/readme.md)
 
 ## Дополнительные принципы разработки
 ### BDUF
