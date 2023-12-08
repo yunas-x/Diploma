@@ -5,7 +5,7 @@ class ValidatorProtocol(Protocol):
     """The uniform interface all data validators shall follow"""
     
     @abstractmethod
-    def validate(self, data, schema) -> bool:
+    def validate(self, data: dict, schema: dict) -> bool:
         """Check if parsed data complies with schema
         
         Returns:
