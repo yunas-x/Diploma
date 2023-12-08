@@ -1,10 +1,12 @@
+from typing import Final
+
 from parsers.hse.BasicParser import BasicParser
 from parsers.protocols.ParserProtocol import ParserProtocol
 
 class ParserFactory:
     """Parser Factory to resolve a parser based on their properties"""
     
-    _parsers = {
+    _parsers: Final = {
         "hse": {
             "basic": {
                 "table": BasicParser
