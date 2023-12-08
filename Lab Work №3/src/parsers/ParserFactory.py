@@ -33,4 +33,4 @@ class ParserFactory:
         Returns:
             ParserProtocol: A parser if exists, otherwise shall throw KeyError exception
         """
-        return ParserFactory._parsers[university][plan_type][data_type]
+        return ParserFactory._parsers[university][plan_type][data_type]()
