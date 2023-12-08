@@ -11,5 +11,5 @@ class ParserProtocol(Protocol):
         Returns:
             dict: structured data on university curricula
         """
-        pass
+        raise NotImplementedError
     
