@@ -11,5 +11,5 @@ class ValidatorProtocol(Protocol):
         Returns:
             bool: True if valid, otherwise False
         """
-        pass
+        raise NotImplementedError
     
