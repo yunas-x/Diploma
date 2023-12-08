@@ -1,8 +1,9 @@
-from typing import Final
+from typing import Final, final
 
 from parsers.hse.BasicParser import BasicParser
 from parsers.protocols.ParserProtocol import ParserProtocol
 
+@final
 class ParserFactory:
     """Parser Factory to resolve a parser based on their properties"""
     
