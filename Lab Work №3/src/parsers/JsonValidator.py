@@ -1,8 +1,11 @@
+from typing import final
+
 import jsonschema
 from mixins.InitFromJsonMixin import InitFromJson
 
 from protocols.ValidatorProtocol import ValidatorProtocol
 
+@final
 class JsonValidator(ValidatorProtocol, InitFromFile):
     """Validates json file against the schema provided"""
     
