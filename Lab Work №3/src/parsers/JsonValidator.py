@@ -6,7 +6,7 @@ from mixins.InitFromJsonMixin import InitFromJson
 from protocols.ValidatorProtocol import ValidatorProtocol
 
 @final
-class JsonValidator(ValidatorProtocol, InitFromFile):
+class JsonValidator(ValidatorProtocol, InitFromJson):
     """Validates json file against the schema provided"""
     
     def __init__(self, schema: dict):
