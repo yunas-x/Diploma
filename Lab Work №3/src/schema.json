@@ -44,7 +44,7 @@
           }
         }
       },
-      "required": ["name", "specialities", "degree", "university", "yearEnrolled", "allCompetences", "courses"]
+      "required": ["name", "specialities", "degree", "yearEnrolled", "courses"]
     }
   },
   "$defs": {
@@ -101,7 +101,7 @@
     },
     "competence": {
       "type": "object",
-      "required": ["code", "name", "type", "content"],
+      "required": ["code", "name", "type"],
       "properties": {
         "code": {
           "type": "string",
@@ -121,7 +121,7 @@
         "content": {
           "type": "string",
           "minLength": 5,
-          "maxLength": 50
+          "maxLength": 150
         }
       } 
     },
