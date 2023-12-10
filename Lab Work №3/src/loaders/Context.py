@@ -11,5 +11,5 @@ Engine = create_engine(
 )
 
 # Default Session Generator
-# SessionLocal() -> Session
+# SessionMaker() -> Session
 SessionMaker = sessionmaker(autocommit=False, autoflush=False, bind=Engine)
