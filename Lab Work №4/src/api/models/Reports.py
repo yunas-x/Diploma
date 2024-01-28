@@ -3,16 +3,22 @@ from ...loaders.orm.Queries import Queries
 from ...loaders.Context import SessionMaker
 from ...loaders.models.Report import Report as ReportORMModel
 
+from datetime import datetime
+
 class Report(BaseModel):
     text: str
-    
+
+class ReportResponse(Report):
+    id: int
+    posted_on: datetime
+
 class ReportRequest(Report):
     user_id: int
     
 class ReportsResponse(BaseModel):
     status: bool
     user_id: int|None
-    reports: list[Report]|None
+    reports: list[ReportResponse]|None
     message: str
     
 class DeleteResponse(BaseModel):
@@ -31,9 +37,9 @@ def get_reports_by_userid(id: int):
     if id is None:
         return ReportsResponse(user_id=None, reports=None, message="No such user")
     reports = Queries().get_reports_by_userid(user_id=id)
-    reports_list = [Report(r.id, 
-                   r.text, 
-                   r.posted_on) 
+    reports_list = [ReportResponse(id=r.id, 
+                                   text=r.text, 
+                                   posted_on=r.posted_on) 
                    for r in reports]
     return ReportsResponse(user_id=id, reports=reports, message="Success")
 

@@ -104,7 +104,7 @@ async def get_reports_by_user_id(username: str, response: Response) -> ReportsRe
           description="""Отправляет обращение в поддержку""",
           status_code=status.HTTP_201_CREATED,
           tags=["reports"])
-async def send_report(report: ReportRequest, response: Response):
+async def send_report(report: ReportRequest, response: Response) -> UpdateResponse:
     # Тут надо добавить куки
     post_report = add_report(report)
     if not post_report.status:
@@ -127,7 +127,8 @@ async def modify_report(report: Report, response: Response) -> UpdateResponse:
 @app.delete("/reports/{report_id}",
             summary="Удалить обращение в поддержку",
             description="""Удалить выбранное обращение в поддержку""",
-            status_code=status.HTTP_200_OK)
+            status_code=status.HTTP_200_OK,
+            tags=["reports"])
 async def delete_report(report_id: int, response: Response) -> DeleteResponse:
     # Тут надо добавить куки
     _status = delete_report_by_id(report_id)
