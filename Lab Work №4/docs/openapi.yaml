@@ -1,0 +1,442 @@
+openapi: 3.0.0
+info:
+  title: BI Curricula
+  description: |-
+    АПИ к хранилищу данных для облегчения сравнения образовательных программ
+    и их выбора абитуриентом. Выполняется в рамках комадного проекта и дипломного проекта в НИУ ВШЭ
+    Пермь в рамках обучения.
+  version: 0.1.3
+paths:
+  /users/create:
+    post:
+      tags:
+        - users
+      summary: Создать пользователя
+      description: |-
+        Создает тестового пользователя
+        с заданным именем и паролем
+      operationId: users_create_users_create_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: Username occupied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Войти в систему
+      description: Выполняет вход в систему при правильном вводе логина и пароля
+      operationId: users_login_users_login_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: Wrong Username or Password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+  /users/{username}/reports:
+    get:
+      tags:
+        - users
+      summary: Вернуть обращения в поддержку
+      description: Возвращает обращения в поддержку для выбранного пользователя
+      operationId: get_users_reports_users__username__reports_get
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Username
+      responses:
+        '302':
+          description: Redirect on another route
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /reports/{username}:
+    get:
+      tags:
+        - reports
+      summary: Вернуть обращения в поддержку
+      description: Возвращает обращения в поддержку для выбранного пользователя
+      operationId: get_reports_by_user_id_reports__username__get
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Username
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '404':
+          description: Reports do not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportsResponse'
+  /reports:
+    put:
+      tags:
+        - reports
+      summary: Изменить обращение в поддержку
+      description: Изменить выбранное обращение в поддержку
+      operationId: modify_report_reports_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+        required: true
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: No such report to update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResponse'
+    post:
+      tags:
+        - reports
+      summary: Отправить обращение в поддержку
+      description: Отправляет обращение в поддержку
+      operationId: send_report_reports_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: Cannot post a report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResponse'
+  /reports/{report_id}:
+    delete:
+      summary: Удалить обращение в поддержку
+      description: Удалить выбранное обращение в поддержку
+      operationId: delete_report_reports__report_id__delete
+      parameters:
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Report Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+  /programs:
+    get:
+      tags:
+        - programs
+      summary: Список программ
+      description: Получает список программ
+      operationId: get_program_on_programs_get
+      parameters:
+        - name: offset
+          in: query
+          required: true
+          schema:
+            anyOf:
+              - type: integer
+            title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgramsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgramsResponse'
+components:
+  schemas:
+    DeleteResponse:
+      properties:
+        status:
+          type: boolean
+          title: Удалено/Не удалено
+        message:
+          type: string
+          title: Сообщение об ошибке/успехе
+      type: object
+      required:
+        - status
+        - message
+      title: DeleteResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Детали
+      type: object
+      title: HTTPValidationError
+    Program:
+      properties:
+        program_name:
+          type: string
+          title: Название программы
+        degree_id:
+          type: integer
+          title: Уровень обучения
+        field_code:
+          type: string
+          title: Направление подготовки (Код ОК 009-2016)
+        university_id:
+          type: integer
+          title: ID университета
+      type: object
+      required:
+        - program_name
+        - degree_id
+        - field_code
+        - university_id
+      title: Program
+    ProgramsResponse:
+      properties:
+        offset:
+          type: integer
+          title: Оффсет базы данных
+        programs:
+          items:
+            $ref: '#/components/schemas/Program'
+          type: array
+          title: Список программ высшего образования
+      type: object
+      required:
+        - offset
+        - programs
+      title: ProgramsResponse
+    Report:
+      properties:
+        text:
+          type: string
+          title: Текст сообщения
+      type: object
+      required:
+        - text
+      title: Report
+    ReportRequest:
+      properties:
+        text:
+          type: string
+          title: Текст сообщения
+        user_id:
+          type: integer
+          title: Id пользователя
+      type: object
+      required:
+        - text
+        - user_id
+      title: ReportRequest
+    ReportsResponse:
+      properties:
+        status:
+          type: Найдено
+          title: Получено/Не найдено
+        user_id:
+          anyOf:
+            - type: integer
+          title: Id пользователя
+        reports:
+          anyOf:
+            - items:
+                $ref: '#/components/schemas/Report'
+              type: array
+          title: Сообщения указанного пользователя
+        message:
+          type: string
+          title: Сообщение об ошибке/успехе
+      type: object
+      required:
+        - status
+        - user_id
+        - reports
+        - message
+      title: ReportsResponse
+    UpdateResponse:
+      properties:
+        text:
+          type: string
+          title: Текст сообщения в поддержку
+        status:
+          type: boolean
+          title: Обновлено/Не обновлено (Отправлено/Не отправлено)
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+        - text
+        - status
+        - message
+      title: UpdateResponse
+    UserRequest:
+      properties:
+        username:
+          type: string
+          minLength: 5
+          title: Имя пользователя
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          minLength: 8
+          title: Пароль
+      type: object
+      required:
+        - username
+        - email
+        - password
+      title: UserRequest
+    UserResponse:
+      properties:
+        username:
+          type: string
+          minLength: 5
+          title: Имя пользователя
+        message:
+          type: string
+          title: Сообщение об ошибке/успехе
+        success:
+          type: boolean
+          title: Создано/Не создано
+      type: object
+      required:
+        - username
+        - message
+        - success
+      title: UserResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
