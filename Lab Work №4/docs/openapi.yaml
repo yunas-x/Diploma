@@ -197,6 +197,8 @@ paths:
       summary: Удалить обращение в поддержку
       description: Удалить выбранное обращение в поддержку
       operationId: delete_report_reports__report_id__delete
+      tags:
+        - reports
       parameters:
         - name: report_id
           in: path
