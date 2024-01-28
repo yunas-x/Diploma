@@ -7,13 +7,15 @@
 <b> GET </b> /programs/{program_id}/courses — получить список курсов для выбранной программы <br>
 <b> POST </b> /programs/compare — сравнить несколько курсов <br>
 
-### /users — сообщения об ошибках
+### /users — пользователи
 <b> POST </b> /users/create — создать пользователя <br>
 <b> POST </b> /users/login — войти в систему <br>
+<b> GET </b> /users/{username}/reports — все обращения пользователя <br>
 
 ### /reports — сообщения об ошибках
 <b> POST </b> /reports — отправить сообщение об ошибке <br>
-<b> GET </b> /reports/{user_id} — получить все сообщения об ошибке от пользователя <br>
-<b> DELETE /reports/{report_id} </b> — удалить сообщение об ошибке <br>
-<b> PUT /reports/{report_id} </b> — изменить сообщение об ошибке <br>
+<b> GET </b> /reports/{username} — получить все сообщения об ошибке от пользователя <br>
+<b> DELETE /reports </b> — удалить сообщение об ошибке <br>
+<b> PUT /reports </b> — изменить сообщение об ошибке <br>
 
+Более подробное описание потоков сообщений в Swagger
