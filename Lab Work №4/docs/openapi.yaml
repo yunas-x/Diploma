@@ -14,7 +14,9 @@ paths:
       summary: Создать пользователя
       description: |-
         Создает тестового пользователя
-        с заданным именем и паролем
+        с заданным именем и паролем.
+        Если пользователь с таким именем существует,
+        возвращает 400 ошибку.
       operationId: users_create_users_create_post
       requestBody:
         content:
@@ -344,7 +346,7 @@ components:
     ReportsResponse:
       properties:
         status:
-          type: Найдено
+          type: boolean
           title: Получено/Не найдено
         user_id:
           anyOf:
