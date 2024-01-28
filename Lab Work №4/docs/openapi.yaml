@@ -54,7 +54,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRequest'
+              $ref: '#/components/schemas/UserLogin'
         required: true
       responses:
         '200':
@@ -98,6 +98,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /reports:
+    post:
+      tags:
+        - reports
+      summary: Отправить обращение в поддержку
+      description: Отправляет обращение в поддержку
+      operationId: send_report_reports_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: Cannot post a report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResponse'
   /reports/{username}:
     get:
       tags:
@@ -131,13 +163,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReportsResponse'
-  /reports:
+  /reports/{report_id}:
     put:
       tags:
         - reports
       summary: Изменить обращение в поддержку
       description: Изменить выбранное обращение в поддержку
       operationId: modify_report_reports_put
+      parameters:
+        - name: report_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Report Id
       requestBody:
         content:
           application/json:
@@ -163,38 +202,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdateResponse'
-    post:
-      tags:
-        - reports
-      summary: Отправить обращение в поддержку
-      description: Отправляет обращение в поддержку
-      operationId: send_report_reports_post
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReportRequest'
-        required: true
-      responses:
-        '201':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UpdateResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-        '400':
-          description: Cannot post a report
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UpdateResponse'
-  /reports/{report_id}:
     delete:
       summary: Удалить обращение в поддержку
       description: Удалить выбранное обращение в поддержку
@@ -395,6 +402,22 @@ components:
           type: string
           format: email
           title: Email
+        password:
+          type: string
+          minLength: 8
+          title: Пароль
+      type: object
+      required:
+        - username
+        - email
+        - password
+      title: UserRequest
+    UserLogin:
+      properties:
+        username:
+          type: string
+          minLength: 5
+          title: Имя пользователя
         password:
           type: string
           minLength: 8
