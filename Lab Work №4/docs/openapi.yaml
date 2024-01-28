@@ -355,7 +355,7 @@ components:
         reports:
           anyOf:
             - items:
-                $ref: '#/components/schemas/Report'
+                $ref: '#/components/schemas/ReportResponse'
               type: array
           title: Сообщения указанного пользователя
         message:
@@ -405,6 +405,24 @@ components:
         - email
         - password
       title: UserRequest
+    ReportResponse:
+      properties:
+        text:
+          type: string
+          title: Сообщение
+        id:
+          type: integer
+          title: ID сообщения об ошибке
+        posted_on:
+          type: string
+          format: date-time
+          title: Дата отправки
+      type: object
+      required:
+        - text
+        - id
+        - posted_on
+      title: ReportResponse
     UserResponse:
       properties:
         username:
