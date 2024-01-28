@@ -1,0 +1,165 @@
+ {
+  "type": "object",
+  "required": ["ProgramInfo"],
+  "properties": {
+    "ProgramInfo": {
+      "type": "object",
+      "properties": {
+        "name": { 
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 150
+        },
+        "fields_of_study": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "$ref":"#/$defs/field_of_study"
+          }
+        },
+        "degree": {
+          "$ref":"#/$defs/degree"
+        },
+        "yearEnrolled": { 
+          "type": "integer",
+          "minimum": 2000,
+          "maximum": 2050
+        },
+        "courses": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/course"
+          }
+        }
+      },
+      "required": ["name", "fields_of_study", "degree", "yearEnrolled", "courses"]
+    }
+  },
+  "$defs": {
+    "course": { 
+      "type": "object",
+      "required": ["name", "type", "credits", "classroomHours", "year", "competences"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 50
+        },
+        "type": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 50
+        },
+        "credits": {
+          "type": "integer",
+          "minimum": 1,
+          "exclusiveMaximum": 60
+        },
+        "classroomHours": {
+          "type": "integer",
+          "minimum": 1,
+          "exclusiveMaximum": 1000
+        },
+        "year": {
+          "type": "integer",
+          "minimum": 1,
+          "exclusiveMaximum": 6
+        },
+        "comments": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "type": "string"
+          }
+        },
+        "competences": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/competence"
+          }
+        },
+        "readBy": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 50
+        }
+      }
+    },
+    "competence": {
+      "type": "object",
+      "required": ["code", "name", "type"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 10
+        },
+        "name": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 200
+        },
+        "type": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 50
+        }
+      } 
+    },
+    "field_of_study": {
+      "type": "object",
+      "required": ["group", "code", "name"],
+      "properties": {
+        "group": {
+          "$ref": "#/$defs/field_group"
+        },
+        "code": { 
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 8
+        },
+        "name": { 
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100
+        }
+      }
+    },
+    "field_group": {
+      "type": "object",
+      "required": ["code", "name"],
+      "properties": { 
+        "code": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 60
+        },
+        "name": { 
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100
+        } 
+      }
+    },
+    "degree": {
+      "type": "object",
+      "required": ["code", "degreeName"],
+      "properties": { 
+        "code": { 
+          "type": "integer",
+          "minimum": 2,
+          "exclusiveMaximum": 8
+        }, 
+        "degreeName": { 
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 30
+        } 
+      }
+    }
+  }
+}
