@@ -15,10 +15,10 @@ class ProgramsResponse(BaseModel):
     
 def get_programs(offset: int) -> list[Program]:
     programs = Queries(SessionMaker).get_programs(offset)
-    programs_list = [Program(p.program_name, 
-                    p.degree_id, 
-                    p.field_code, 
-                    p.university_id) 
+    programs_list = [Program(program_name=p.program_name, 
+                             degree_id=p.degree_id, 
+                             field_code=p.field_code, 
+                             university_id=p.university_id) 
                     for p in programs]
     return ProgramsResponse(offset=offset, 
                             programs=programs_list)

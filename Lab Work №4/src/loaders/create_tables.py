@@ -9,6 +9,7 @@ from models.University import University
 from models.Intermediate import Intermediate
 from models.IntermediateValues import IntermediateValues
 from models.User import User
+from models.Report import Report
 from Context import Engine
 
 
@@ -24,3 +25,4 @@ if __name__ == "__main__":
     Intermediate.metadata.create_all(bind=Engine)
     IntermediateValues.metadata.create_all(bind=Engine)
     User.metadata.create_all(bind=Engine)
+    Report.metadata.create_all(bind=Engine)

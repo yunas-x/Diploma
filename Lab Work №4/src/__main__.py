@@ -19,6 +19,7 @@ from .api.models.Reports import (
 
 from .api.models.User import (
     User,
+    UserLogin,
     UserRequest,
     UserResponse, 
     add_user, 
@@ -63,7 +64,7 @@ async def users_create(request: UserRequest,
           description="""Выполняет вход в систему при правильном вводе логина и пароля""",
           status_code=status.HTTP_200_OK,
           tags=["users"])
-async def users_login(request: UserRequest,
+async def users_login(request: UserLogin,
                       response: Response) -> UserResponse:
     
     user = find_user(request)
@@ -84,7 +85,7 @@ async def users_login(request: UserRequest,
           status_code=status.HTTP_302_FOUND,
           tags=["users"])
 async def get_users_reports(username: str):
-    return "/reports/{username}"
+    return f"/reports/{username}"
 
 @app.get("/reports/{username}",
           summary="Вернуть обращения в поддержку",
@@ -93,7 +94,7 @@ async def get_users_reports(username: str):
           tags=["reports"])
 async def get_reports_by_user_id(username: str, response: Response) -> ReportsResponse:
     id = get_id_by_username(User(username=username))
-    reports = get_reports_by_userid(id)
+    reports = get_reports_by_userid(id[0])
     if id is None:
         response.status_code = status.HTTP_404_NOT_FOUND
     return reports
@@ -112,14 +113,14 @@ async def send_report(report: ReportRequest, response: Response) -> UpdateRespon
     return post_report
     
 
-@app.put("/reports",
+@app.put("/reports/{report_id}",
          summary="Изменить обращение в поддержку",
          description="""Изменить выбранное обращение в поддержку""",
          status_code=status.HTTP_202_ACCEPTED,
          tags=["reports"])
-async def modify_report(report: Report, response: Response) -> UpdateResponse:
+async def modify_report(report_id: int, report: Report, response: Response) -> UpdateResponse:
     # Тут надо добавить куки
-    upd_report = update_report_by_id(report.id, report.text)
+    upd_report = update_report_by_id(report_id, report.text)
     if not upd_report.status:
         response.status_code = status.HTTP_400_BAD_REQUEST
     return upd_report

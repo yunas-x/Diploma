@@ -9,8 +9,10 @@ from ...loaders.Context import SessionMaker
 class User(BaseModel):
     username: str = Field(min_length=5)
     
+class UserLogin(User):
+    password: str = Field(min_length=8)
+    
 class UserRequest(User):
-    username: str = Field(min_length=5)
     email: EmailStr # По хорошему надо валидировать путем отправки письма
     password: str = Field(min_length=8)
 
@@ -23,7 +25,7 @@ status_mapping = {ORMStatus.OK: "Success",
                   ORMStatus.Fail: "Failed to create user"}
 
 def find_user(user: User):
-    id = Queries().find_user(user.username)
+    id = Queries(SessionMaker).find_user(user.username)
     if id is None:
         return UserResponse(username=user.username,
                             message="No user with that name",
@@ -34,7 +36,7 @@ def find_user(user: User):
                         success=True)
     
 def get_id_by_username(user: User):
-    return Queries().find_user(user.username)
+    return Queries(SessionMaker).find_user(user.username)
 
 
 def add_user(user: UserRequest) -> UserResponse:
@@ -48,7 +50,8 @@ def add_user(user: UserRequest) -> UserResponse:
                         success=status==ORMStatus.OK)
     
 def login(user: UserRequest) -> UserResponse:
-    id = Queries().find_pass(id=id, password=hashlib.md5(user.password.encode()).hexdigest())
+    id = Queries(SessionMaker).find_pass(username=user.username, 
+                                         password=hashlib.md5(user.password.encode()).hexdigest())
     if id is None:
         return UserResponse(username=user.username,
                             message="Wrong password",

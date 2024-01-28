@@ -63,11 +63,11 @@ class Queries:
             .first()
         return id
 
-    def find_pass(self, id: int, password: str):
+    def find_pass(self, username: str, password: str):
         with self._session_maker() as session:
             id = session \
             .query(User.id) \
-            .where(User.id == id 
+            .where(User.username == username 
                    and User.password == password) \
             .first()
         return id
@@ -82,7 +82,7 @@ class Queries:
             .all()
         return reports
     
-    def delete_report_by_id(self, id: int, userid: int):
+    def delete_report_by_id(self, id: int):
         with self._session_maker() as session:
             try:
                 session.execute(delete(Report)

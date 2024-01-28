@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from ...loaders.orm.Queries import Queries
+from ...loaders.orm.ORMStatus import ORMStatus
 from ...loaders.Context import SessionMaker
 from ...loaders.models.Report import Report as ReportORMModel
 
@@ -7,7 +8,7 @@ from datetime import datetime
 
 class Report(BaseModel):
     text: str
-
+    
 class ReportResponse(Report):
     id: int
     posted_on: datetime
@@ -35,21 +36,21 @@ post_status_mapping = {True: "Posted", False: "Not Posted. Try again"}
     
 def get_reports_by_userid(id: int):
     if id is None:
-        return ReportsResponse(user_id=None, reports=None, message="No such user")
-    reports = Queries().get_reports_by_userid(user_id=id)
-    reports_list = [ReportResponse(id=r.id, 
-                                   text=r.text, 
+        return ReportsResponse(user_id=None, reports=None, message="No such user", status=False)
+    reports = Queries(SessionMaker).get_reports_by_userid(user_id=id)
+    reports_list = [ReportResponse(text=r.text,
+                                   id=r.id, 
                                    posted_on=r.posted_on) 
                    for r in reports]
-    return ReportsResponse(user_id=id, reports=reports, message="Success")
+    return ReportsResponse(user_id=id, reports=reports_list, message="Success", status=True)
 
 def delete_report_by_id(id: int) -> DeleteResponse:
-    status = Queries().delete_report_by_id(id=id)
+    status = Queries(SessionMaker).delete_report_by_id(id=id)
     return DeleteResponse(message=delete_status_mapping[status], 
                           status=status)
     
 def update_report_by_id(id: int, text: str) -> UpdateResponse:
-    status = Queries().update_report_by_id(id=id, text=text)
+    status = Queries(SessionMaker).update_report_by_id(id=id, text=text)
     return UpdateResponse(text=text, 
                           message=update_status_mapping[status],
                           status=status)
@@ -60,6 +61,6 @@ def add_report(report: ReportRequest) -> UpdateResponse:
     
     status = Queries(SessionMaker).add(model)
     return UpdateResponse(text=report.text, 
-                          message=post_status_mapping[status],
-                          status=status)
+                          message=post_status_mapping[status==ORMStatus.OK],
+                          status=status==ORMStatus.OK)
     
