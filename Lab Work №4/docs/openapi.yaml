@@ -5,7 +5,7 @@ info:
     АПИ к хранилищу данных для облегчения сравнения образовательных программ
     и их выбора абитуриентом. Выполняется в рамках комадного проекта и дипломного проекта в НИУ ВШЭ
     Пермь в рамках обучения.
-  version: 0.1.3
+  version: 0.1.4
 paths:
   /users/create:
     post:
@@ -62,7 +62,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: '#/components/schemas/UserTokenResponse'
         '422':
           description: Validation Error
           content:
@@ -84,11 +84,20 @@ paths:
       operationId: get_users_reports_users__username__reports_get
       parameters:
         - name: username
+          description: "Имя пользователя"
           in: path
           required: true
           schema:
             type: string
-            title: Username
+            title: Имя пользователя
+            minLength: 5
+        - name: xxx-token
+          description: "Токен авторизации"
+          in: header
+          required: true
+          schema:
+            type: integer
+            title: Токен авторизации
       responses:
         '302':
           description: Redirect on another route
@@ -105,6 +114,14 @@ paths:
       summary: Отправить обращение в поддержку
       description: Отправляет обращение в поддержку
       operationId: send_report_reports_post
+      parameters:
+        - name: xxx-token
+          description: "Токен авторизации"
+          in: header
+          required: true
+          schema:
+            type: integer
+            title: Токен авторизации
       requestBody:
         content:
           application/json:
@@ -130,6 +147,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdateResponse'
+        '401':
+          description: Invalid auth xxx_token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
   /reports/{username}:
     get:
       tags:
@@ -139,11 +162,19 @@ paths:
       operationId: get_reports_by_user_id_reports__username__get
       parameters:
         - name: username
+          description: "Имя пользователя"
           in: path
           required: true
           schema:
             type: string
-            title: Username
+            title: Имя пользователя
+        - name: xxx-token
+          description: "Токен авторизации"
+          in: header
+          required: true
+          schema:
+            type: integer
+            title: Токен авторизации
       responses:
         '200':
           description: Successful Response
@@ -163,6 +194,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReportsResponse'
+        '401':
+          description: Invalid auth xxx_token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
   /reports/{report_id}:
     put:
       tags:
@@ -172,11 +209,19 @@ paths:
       operationId: modify_report_reports_put
       parameters:
         - name: report_id
+          description: "ID сообщения"
           in: path
           required: true
           schema:
             type: integer
-            title: Report Id
+            title: ID сообщения
+        - name: xxx-token
+          description: "Токен авторизации"
+          in: header
+          required: true
+          schema:
+            type: integer
+            title: Токен авторизации
       requestBody:
         content:
           application/json:
@@ -202,6 +247,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdateResponse'
+        '401':
+          description: Invalid auth xxx_token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
     delete:
       summary: Удалить обращение в поддержку
       description: Удалить выбранное обращение в поддержку
@@ -210,11 +261,26 @@ paths:
         - reports
       parameters:
         - name: report_id
+          description: "ID сообщения"
           in: path
           required: true
           schema:
             type: integer
-            title: Report Id
+            title: ID сообщения
+        - name: xxx-token
+          description: "Токен авторизации"
+          in: header
+          required: true
+          schema:
+            type: integer
+            title: Токен авторизации
+        - name: xxx-userdata
+          description: "ID пользователя"
+          in: header
+          required: true
+          schema:
+            type: integer
+            title: ID пользователя
       responses:
         '200':
           description: Successful Response
@@ -234,6 +300,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          description: Invalid auth xxx_token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
   /programs:
     get:
       tags:
@@ -243,12 +315,13 @@ paths:
       operationId: get_program_on_programs_get
       parameters:
         - name: offset
+          description: "Оффсет запроса"
           in: query
           required: true
           schema:
             anyOf:
               - type: integer
-            title: Offset
+            title: Оффсет запроса
       responses:
         '200':
           description: Successful Response
@@ -289,6 +362,13 @@ components:
           items:
             $ref: '#/components/schemas/ValidationError'
           type: array
+          title: Детали
+      type: object
+      title: HTTPValidationError
+    HTTPAuthError:
+      properties:
+        detail:
+          type: string
           title: Детали
       type: object
       title: HTTPValidationError
@@ -485,3 +565,25 @@ components:
         - msg
         - type
       title: ValidationError
+    UserTokenResponse:
+      properties:
+        username:
+          type: string
+          minLength: 5
+          title: Имя пользователя
+        message:
+          type: string
+          title: Сообщение об ошибке/успехе
+        success:
+          type: boolean
+          title: Создано/Не создано
+        token:
+          type: integer
+          title: Токен авторизации
+      type: object
+      required:
+        - username
+        - message
+        - success
+        - token
+      title: UserTokenResponse
