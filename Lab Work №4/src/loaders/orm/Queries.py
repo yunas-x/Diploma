@@ -1,7 +1,7 @@
 from datetime import timedelta
 from datetime import datetime
 from typing import Iterable
-from sqlalchemy import delete, update
+from sqlalchemy import and_, delete, update
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
 
@@ -70,8 +70,10 @@ class Queries:
         with self._session_maker() as session:
             id = session \
             .query(User.id) \
-            .where(User.username == username 
-                   and User.password == password) \
+            .where(and_(
+                        User.username == username, 
+                        User.password == password)
+                   ) \
             .first()
         return id
     
@@ -84,6 +86,16 @@ class Queries:
             .where(Report.user_id==user_id) \
             .all()
         return reports
+    
+    def check_report_is_owned_by_user(self, id: int, user_id: int):
+        with self._session_maker() as session:
+            is_valid = session \
+                            .query(Report.posted_on) \
+                            .where(and_(Report.user_id==user_id,
+                                        Report.id==id)
+                                   ) \
+                            .count() > 0
+        return is_valid
     
     def delete_report_by_id(self, id: int):
         with self._session_maker() as session:
@@ -128,9 +140,9 @@ class Queries:
         with self._session_maker() as session:
             is_valid = session \
                             .query(Token.posted_on) \
-                            .where(Token.user_id==user_id and 
-                                   Token.token==token and
-                                   Token.posted_on) \
-                            .filter(Token.posted_on > since) \
+                            .where(and_(Token.user_id==user_id,
+                                   Token.token==token,
+                                   Token.posted_on > since)
+                                   ) \
                             .count() > 0
         return is_valid

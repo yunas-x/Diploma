@@ -12,7 +12,8 @@ from .api.models.Reports import (
     ReportRequest, 
     ReportsResponse,
     UpdateResponse,
-    add_report, 
+    add_report,
+    check_report, 
     delete_report_by_id, 
     get_reports_by_userid, 
     update_report_by_id
@@ -140,6 +141,9 @@ async def modify_report(report_id: int,
     if not validate(id=report.user_id, token=xxx_token):
         response.status_code = status.HTTP_401_UNAUTHORIZED
         raise HTTPException(401, "Invalid token")
+    if not check_report(id=report_id, user_id=report.user_id):
+        response.status_code = status.HTTP_403_FORBIDDEN
+        raise HTTPException(403, "Cannot Modify this")
     upd_report = update_report_by_id(report_id, report.text)
     if not upd_report.status:
         response.status_code = status.HTTP_400_BAD_REQUEST
@@ -158,7 +162,9 @@ async def delete_report(report_id: int,
     if not validate(id=xxx_userdata, token=xxx_token):
         response.status_code = status.HTTP_401_UNAUTHORIZED
         raise HTTPException(401, "Invalid token")
-    
+    if not check_report(id=report_id, user_id=xxx_userdata):
+        response.status_code = status.HTTP_403_FORBIDDEN
+        raise HTTPException(403, "Cannot Modify this")
     _status = delete_report_by_id(report_id)
     if not _status.status:
         response.status_code = status.HTTP_400_BAD_REQUEST
