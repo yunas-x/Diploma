@@ -8,6 +8,9 @@ from datetime import datetime
 
 class Report(BaseModel):
     text: str
+
+class DeleteReportRequest(BaseModel):
+    user_id: int
     
 class ReportResponse(Report):
     id: int
