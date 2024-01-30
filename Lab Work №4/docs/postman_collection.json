@@ -570,6 +570,11 @@
 									{
 										"key": "Accept",
 										"value": "application/json"
+									},
+									{
+										"key": "xxx-token",
+										"value": "5041",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -584,7 +589,7 @@
 									"variable": [
 										{
 											"key": "username",
-											"value": "<string>",
+											"value": "MasterX",
 											"description": "(Required) "
 										}
 									]
@@ -885,6 +890,24 @@
 				},
 				{
 					"name": "Изменить обращение в поддержку",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify status code is 202\", function () {\r",
+									"    pm.response.to.have.status(202);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Logged in\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"Updated\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -895,6 +918,11 @@
 							{
 								"key": "Accept",
 								"value": "application/json"
+							},
+							{
+								"key": "xxx-token",
+								"value": "5041",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -1091,6 +1119,11 @@
 							{
 								"key": "Accept",
 								"value": "application/json"
+							},
+							{
+								"key": "xxx-token",
+								"value": "33333",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -1262,6 +1295,19 @@
 			"item": [
 				{
 					"name": "Список программ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -1271,7 +1317,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/programs?offset=<integer>",
+							"raw": "{{baseUrl}}/programs?offset=10",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -1281,7 +1327,7 @@
 							"query": [
 								{
 									"key": "offset",
-									"value": "<integer>",
+									"value": "10",
 									"description": "(Required) "
 								}
 							]

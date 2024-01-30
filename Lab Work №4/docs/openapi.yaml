@@ -253,6 +253,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPAuthError'
+        '403':
+          description: You cannot change this report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
     delete:
       summary: Удалить обращение в поддержку
       description: Удалить выбранное обращение в поддержку
@@ -302,6 +308,12 @@ paths:
                 $ref: '#/components/schemas/DeleteResponse'
         '401':
           description: Invalid auth xxx_token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
+        '403':
+          description: You are not allowed to delete this report
           content:
             application/json:
               schema:
