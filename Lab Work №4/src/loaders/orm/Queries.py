@@ -1,9 +1,12 @@
+from datetime import timedelta
+from datetime import datetime
 from typing import Iterable
 from sqlalchemy import delete, update
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
 
 from ..models.Report import Report
+from ..models.Token import Token
 from ..models.Intermediate import Intermediate
 from ..models.User import User
 from .ORMStatus import ORMStatus
@@ -30,9 +33,9 @@ class Queries:
                 session.add(entity)
                 session.commit()
                 status = ORMStatus.OK
-            except:
+            except Exception as e:
                 status = ORMStatus.Fail
-                # There will be logging
+                print(e)
         return status
     
     def add_all(self, entities: Iterable[BaseModel]) -> ORMStatus:
@@ -119,3 +122,15 @@ class Queries:
             .limit(20) \
             .all()
         return programs
+    
+    def validate_token(self, user_id: int, token: int):
+        since = datetime.now() - timedelta(hours=24)
+        with self._session_maker() as session:
+            is_valid = session \
+                            .query(Token.posted_on) \
+                            .where(Token.user_id==user_id and 
+                                   Token.token==token and
+                                   Token.posted_on) \
+                            .filter(Token.posted_on > since) \
+                            .count() > 0
+        return is_valid

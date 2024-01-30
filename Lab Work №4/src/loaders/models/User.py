@@ -14,3 +14,4 @@ class User(BaseModel):
     password: Mapped[str]
     
     reports = relationship("Report", back_populates="user")
+    tokens = relationship("Token", back_populates="user")
