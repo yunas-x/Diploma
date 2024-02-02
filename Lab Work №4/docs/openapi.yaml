@@ -329,7 +329,6 @@ paths:
         - name: offset
           description: "Оффсет запроса"
           in: query
-          required: true
           schema:
             anyOf:
               - type: integer
