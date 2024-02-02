@@ -226,7 +226,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Report'
+              $ref: '#/components/schemas/ReportRequest'
         required: true
       responses:
         '202':
