@@ -7,7 +7,6 @@ API к хранилищу данных для облегчения сравне�
 
 ### /programs — программы высшего образования
 <b> GET </b> /programs — получить все программы высшего образования <br>
-<b> IN: </b> <br>
 <i> Query parameters: </i> <br>
 offset: integer — номер строки, с которой возвращаются записи из базы данных, по умолчанию равен 0. Можно использовать для пагинации. <br>
 <br>
@@ -17,20 +16,17 @@ offset: integer — номер строки, с которой возвраща�
 
 ### /users — пользователи
 <b> POST </b> /users/create — создать пользователя <br>
-<b> IN: </b> <br>
 <i> Body parameters: </i> <br>
 username: string (english) — имя пользователя <br>
 email: string (email) — E-Mail <br>
 password: string (english) — пароль <br>
 <br>
 <b> POST </b> /users/login — войти в систему <br>
-<b> IN: </b> <br>
 <i> Body parameters: </i> <br>
 username: string (english) — имя пользователя <br>
 password: string (english) — пароль <br>
 <br>
 <b> GET </b> /users/{username}/reports — все обращения пользователя <br>
-<b> IN: </b> <br>
 <i> Path parameters: </i> <br>
 username: string (english) — имя пользователя <br>
 <i> Headers: </i> <br>
@@ -38,20 +34,33 @@ xxx-token: integer — токен авторизации <br>
 
 ### /reports — сообщения об ошибках
 <b> POST </b> /reports — отправить сообщение об ошибке <br>
-<b> IN: </b> <br>
 <i> Body parameters: </i> <br>
+text: string — сообщение об ошибке
+user_id: int — id пользователя
+<i> Headers: </i> <br>
+xxx-token: integer — токен авторизации <br>
 <br>
 <b> GET </b> /reports/{username} — получить все сообщения об ошибке от пользователя <br>
-<b> IN: </b> <br>
-<i> Body parameters: </i> <br>
+<i> Path parameters: </i> <br>
+username: string (english) — имя пользователя <br>
+<i> Headers: </i> <br>
+xxx-token: integer — токен авторизации <br>
 <br>
 <b> DELETE </b> /reports/{report_id} — удалить сообщение об ошибке <br>
-<b> IN: </b> <br>
-<i> Body parameters: </i> <br>
+<i> Path parameters: </i> <br>
+report_id: int — id обращения
+<i> Headers: </i> <br>
+xxx-token: integer — токен авторизации <br>
+xxx-userdata: integer — id пользователя <br>
 <br>
 <b> PUT </b> /reports/{report_id}  — изменить сообщение об ошибке <br>
-<b> IN: </b> <br>
+<i> Path parameters: </i> <br>
+report_id: int — id обращения
+<i> Headers: </i> <br>
+xxx-token: integer — токен авторизации <br>
 <i> Body parameters: </i> <br>
+text: string — сообщение об ошибке
+user_id: int — id пользователя
 <br>
 
 Более подробное описание потоков сообщений для реализованных методов в [Swagger](openapi.yaml). <br>
