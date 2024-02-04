@@ -21,16 +21,29 @@ username: string (english) — имя пользователя <br>
 email: string (email) — E-Mail <br>
 password: string (english) — пароль <br>
 <br>
+<i> Response: </i> <br>
+username: string — имя пользователя (не менее 5 символов) <br>
+message: string — сообщение об ошибке/успехе <br>
+success: boolean — создано/не создано <br>
+<br>
 <b> POST </b> /users/login — войти в систему <br>
 <i> Body parameters: </i> <br>
 username: string (english) — имя пользователя <br>
 password: string (english) — пароль <br>
+<br>
+<i> Response: </i> <br>
+username: string — имя пользователя (не менее 5 символов) <br>
+message: string — сообщение об ошибке/успехе <br>
+success: boolean — создано/не создано <br>
+token: integer — токен авторизации <br>
 <br>
 <b> GET </b> /users/{username}/reports — все обращения пользователя <br>
 <i> Path parameters: </i> <br>
 username: string (english) — имя пользователя <br>
 <i> Headers: </i> <br>
 xxx-token: integer — токен авторизации <br>
+<i> Redirect: </i> <br>
+<b> GET </b> /reports/{username} <br>
 
 ### /reports — сообщения об ошибках
 Данные запросы завершаются ошибкой при неверных данных пользователя (id или имя пользователя) и токенах авторизации. <br>
