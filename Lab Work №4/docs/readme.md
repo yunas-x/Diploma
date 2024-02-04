@@ -42,8 +42,7 @@ token: integer — токен авторизации <br>
 username: string (english) — имя пользователя <br>
 <i> Headers: </i> <br>
 xxx-token: integer — токен авторизации <br>
-<i> Redirect: </i> <br>
-<b> GET </b> /reports/{username} <br>
+<i> Redirect on: </i> <b> GET </b> /reports/{username} <br>
 
 ### /reports — сообщения об ошибках
 Данные запросы завершаются ошибкой при неверных данных пользователя (id или имя пользователя) и токенах авторизации. <br>
