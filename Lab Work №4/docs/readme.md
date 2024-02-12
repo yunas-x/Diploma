@@ -131,7 +131,9 @@ pm.test("Success response", function () {
 });
 ```
 ![plot](Screenshots/programs1.png)
+<br>
 ![plot](Screenshots/programs2.png)
+<br>
 <b> POST /users/create </b><br>
 Тестируется невозможность создать пользователя с тем же именем
 ```
@@ -145,6 +147,10 @@ pm.test("Message 9s Username already used", function () {
     pm.expect(jsonData.username).to.eql("MasterX");
 });
 ```
+![plot](Screenshots/users_create1.png)
+<br>
+![plot](Screenshots/users_create2.png)
+<br>
 <b> POST /users/login </b><br>
 ```
 pm.test("Verify status code is 200", function () {
@@ -157,6 +163,10 @@ pm.test("Check if logged in", function () {
     pm.expect(jsonData.username).to.eql("MasterX");
 });
 ```
+![plot](Screenshots/users_login1.png)
+<br>
+![plot](Screenshots/users_login2.png)
+<br>
 <b> GET /users/{username}/reports </b><br>
 ```
 pm.test("Verify status code is 200", function () {
@@ -169,6 +179,10 @@ pm.test("Success response", function () {
     pm.expect(jsonData.reports.length).to.eql(2);
 });
 ```
+![plot](Screenshots/user_reports1.png)
+<br>
+![plot](Screenshots/user_reports2.png)
+<br>
 <b> POST /reports </b><br>
 ```
 pm.test("Verify status code is 201", function () {
@@ -181,6 +195,12 @@ pm.test("Check if posted", function () {
     pm.expect(jsonData.message).to.eql("Posted");
 });
 ```
+![plot](Screenshots/post1.png)
+<br>
+![plot](Screenshots/post2.png)
+<br>
+![plot](Screenshots/post3.png)
+<br>
 <b> GET /reports/{username} </b><br>
 ```
 pm.test("Verify status code is 200", function () {
@@ -193,6 +213,10 @@ pm.test("Check length", function () {
     pm.expect(jsonData.reports.length).to.eql(2);
 });
 ```
+![plot](Screenshots/reports1.png)
+<br>
+![plot](Screenshots/reports2.png)
+<br>
 <b> DELETE /reports/{report_id} </b><br>
 ```
 pm.test("Verify status code is 200", function () {
@@ -204,6 +228,10 @@ pm.test("Check if deleted", function () {
     pm.expect(jsonData.message).to.eql("Deleted");
 });
 ```
+![plot](Screenshots/delete_report1.png)
+<br>
+![plot](Screenshots/delete_report2.png)
+<br>
 <b> PUT /reports/{report_id} </b><br>
 ```
 pm.test("Verify status code is 202", function () {
@@ -215,6 +243,10 @@ pm.test("Check if updated", function () {
     pm.expect(jsonData.message).to.eql("Updated");
 });
 ```
+![plot](Screenshots/reports_put1.png)
+<br>
+![plot](Screenshots/reports_put2.png)
+<br>
 
 ## Дополнительно
 Более подробное описание потоков сообщений для реализованных методов в [Swagger](openapi.yaml). <br>
