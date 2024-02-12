@@ -130,6 +130,8 @@ pm.test("Success response", function () {
     pm.expect(jsonData.programs.length).to.eql(20);
 });
 ```
+![plot](Screenshots/programs1.png)
+![plot](Screenshots/programs2.png)
 <b> POST /users/create </b><br>
 Тестируется невозможность создать пользователя с тем же именем
 ```
