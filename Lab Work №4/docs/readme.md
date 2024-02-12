@@ -49,6 +49,7 @@ token: integer — токен авторизации <br>
 username: string (english) — имя пользователя <br>
 <i> Headers: </i> <br>
 xxx-token: integer — токен авторизации <br>
+<br>
 <i> Redirect on: </i> <b> GET </b> /reports/{username} <br>
 
 ### /reports — сообщения об ошибках
@@ -59,8 +60,10 @@ xxx-token: integer — токен авторизации <br>
 <i> Body parameters: </i> <br>
 text: string — сообщение об ошибке <br>
 user_id: int — id пользователя <br>
+<br>
 <i> Headers: </i> <br>
 xxx-token: integer — токен авторизации <br>
+<br>
 <i> Response: </i> <br>
 text: string — текст сообщения в поддержку <br>
 message: string — сообщение об ошибке/успехе <br>
@@ -69,8 +72,10 @@ success: boolean — создано/не создано <br>
 <b> GET </b> /reports/{username} — получить все сообщения об ошибке от пользователя <br>
 <i> Path parameters: </i> <br>
 username: string (english) — имя пользователя <br>
+<br>
 <i> Headers: </i> <br>
 xxx-token: integer — токен авторизации <br>
+<br>
 <i> Response: </i> <br>
 user_id: integer — Id пользователя <br>
 message: string — сообщение об ошибке/успехе <br>
@@ -86,9 +91,11 @@ posted_on: string(date-time) — дата отправки <br>
 <b> DELETE </b> /reports/{report_id} — удалить сообщение об ошибке <br>
 <i> Path parameters: </i> <br>
 report_id: int — id обращения <br>
+<br>
 <i> Headers: </i> <br>
 xxx-token: integer — токен авторизации <br>
 xxx-userdata: integer — id пользователя <br>
+<br>
 <i> Response: </i> <br>
 message: string — сообщение об ошибке/успехе <br>
 success: boolean — удалено/не удалено <br>
@@ -96,11 +103,14 @@ success: boolean — удалено/не удалено <br>
 <b> PUT </b> /reports/{report_id}  — изменить сообщение об ошибке <br>
 <i> Path parameters: </i> <br>
 report_id: int — id обращения <br>
+<br>
 <i> Headers: </i> <br>
 xxx-token: integer — токен авторизации <br>
+<br>
 <i> Body parameters: </i> <br>
 text: string — сообщение об ошибке <br>
 user_id: int — id пользователя <br>
+<br>
 <i> Response: </i> <br>
 text: string — текст сообщения в поддержку
 status: boolean — обновлено/не обновлено
