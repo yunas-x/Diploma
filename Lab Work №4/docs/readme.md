@@ -119,9 +119,19 @@ message: string — сообщение об ошибке/успехе <br>
 
 ## Тестирование API
 <b> GET /programs </b><br>
+```
+pm.test("Verify status code is 200", function () {
+    pm.response.to.have.status(200);
+});
 
+pm.test("Success response", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.offset).to.eql(10);
+    pm.expect(jsonData.programs.length).to.eql(20);
+});
+```
 <b> POST /users/create </b><br>
-
+Тестируется невозможность создать пользователя с тем же именем
 ```
 pm.test("Verify status code is 400", function () {
     pm.response.to.have.status(400);
@@ -134,11 +144,75 @@ pm.test("Message 9s Username already used", function () {
 });
 ```
 <b> POST /users/login </b><br>
+```
+pm.test("Verify status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("Logged in", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.message).to.eql("Logged in");
+    pm.expect(jsonData.username).to.eql("MasterX");
+});
+```
 <b> GET /users/{username}/reports </b><br>
+```
+pm.test("Verify status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("Success response", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.status).to.eql(true);
+    pm.expect(jsonData.reports.length).to.eql(2);
+});
+```
 <b> POST /reports </b><br>
+```
+pm.test("Verify status code is 201", function () {
+    pm.response.to.have.status(201);
+});
+
+pm.test("Posted", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.text).to.eql("Eh bien mon prince");
+    pm.expect(jsonData.message).to.eql("Posted");
+});
+```
 <b> GET /reports/{username} </b><br>
+```
+pm.test("Verify status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("Success response", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.status).to.eql(true);
+    pm.expect(jsonData.reports.length).to.eql(2);
+});
+```
 <b> DELETE /reports/{report_id} </b><br>
+```
+pm.test("Verify status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("Message", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.message).to.eql("Deleted");
+});
+```
 <b> PUT /reports/{report_id} </b><br>
+```
+pm.test("Verify status code is 202", function () {
+    pm.response.to.have.status(202);
+});
+
+pm.test("Updated", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.message).to.eql("Updated");
+});
+```
 
 ## Дополнительно
 Более подробное описание потоков сообщений для реализованных методов в [Swagger](openapi.yaml). <br>
