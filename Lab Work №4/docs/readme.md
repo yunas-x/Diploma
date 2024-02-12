@@ -149,7 +149,7 @@ pm.test("Verify status code is 200", function () {
     pm.response.to.have.status(200);
 });
 
-pm.test("Logged in", function () {
+pm.test("Check if logged in", function () {
     var jsonData = pm.response.json();
     pm.expect(jsonData.message).to.eql("Logged in");
     pm.expect(jsonData.username).to.eql("MasterX");
@@ -173,7 +173,7 @@ pm.test("Verify status code is 201", function () {
     pm.response.to.have.status(201);
 });
 
-pm.test("Posted", function () {
+pm.test("Check if posted", function () {
     var jsonData = pm.response.json();
     pm.expect(jsonData.text).to.eql("Eh bien mon prince");
     pm.expect(jsonData.message).to.eql("Posted");
@@ -185,7 +185,7 @@ pm.test("Verify status code is 200", function () {
     pm.response.to.have.status(200);
 });
 
-pm.test("Success response", function () {
+pm.test("Check length", function () {
     var jsonData = pm.response.json();
     pm.expect(jsonData.status).to.eql(true);
     pm.expect(jsonData.reports.length).to.eql(2);
@@ -197,7 +197,7 @@ pm.test("Verify status code is 200", function () {
     pm.response.to.have.status(200);
 });
 
-pm.test("Message", function () {
+pm.test("Check if deleted", function () {
     var jsonData = pm.response.json();
     pm.expect(jsonData.message).to.eql("Deleted");
 });
@@ -208,7 +208,7 @@ pm.test("Verify status code is 202", function () {
     pm.response.to.have.status(202);
 });
 
-pm.test("Updated", function () {
+pm.test("Check if updated", function () {
     var jsonData = pm.response.json();
     pm.expect(jsonData.message).to.eql("Updated");
 });
