@@ -119,7 +119,20 @@ message: string — сообщение об ошибке/успехе <br>
 
 ## Тестирование API
 <b> GET /programs </b><br>
-<b> POST /users </b><br>
+
+<b> POST /users/create </b><br>
+
+```
+pm.test("Verify status code is 400", function () {
+    pm.response.to.have.status(400);
+});
+
+pm.test("Message 9s Username already used", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.message).to.eql("Username already used");
+    pm.expect(jsonData.username).to.eql("MasterX");
+});
+```
 <b> POST /users/login </b><br>
 <b> GET /users/{username}/reports </b><br>
 <b> POST /reports </b><br>
