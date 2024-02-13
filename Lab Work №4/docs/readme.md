@@ -21,7 +21,6 @@ Program {
         field_code: string — направление подготовки (Код ОК 009-2016)
         university_id: integer — ID университета
 }
-<br>
 ```
 
 ### /users — пользователи
