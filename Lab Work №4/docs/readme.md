@@ -86,9 +86,9 @@ Program {
 <br>
 ```
 ReportResponse {
-text: string — сообщение
-id: integer — ID сообщения об ошибке
-posted_on: string(date-time) — дата отправки
+        text: string — сообщение
+        id: integer — ID сообщения об ошибке
+        posted_on: string(date-time) — дата отправки
 }
 ```
 <br>
