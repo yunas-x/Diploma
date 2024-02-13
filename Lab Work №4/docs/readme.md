@@ -24,7 +24,7 @@ Program {
 ```
 
 ### /users — пользователи
-<b> POST </b> ```/users/create``` — создать пользователя <br>
+<b> POST </b> <b>```/users/create```</b> — создать пользователя <br>
 <i> Body parameters: </i> <br>
 ```username```: ```string (english)``` — имя пользователя <br>
 ```email```: ```string (email)``` — E-Mail <br>
@@ -35,7 +35,7 @@ Program {
 ```message```: ```string``` — сообщение об ошибке/успехе <br>
 ```success```: ```boolean``` — создано/не создано <br>
 <br>
-<b> POST </b> ```/users/login``` — войти в систему <br>
+<b> POST </b> <b>```/users/login```</b> — войти в систему <br>
 <i> Body parameters: </i> <br>
 ```username```: ```string (english)``` — имя пользователя <br>
 ```password```: ```string (english)``` — пароль <br>
@@ -46,19 +46,19 @@ Program {
 ```success```: ```boolean``` — создано/не создано <br>
 ```token```: ```integer``` — токен авторизации <br>
 <br>
-<b> GET </b> ```/users/{username}/reports``` — все обращения пользователя <br>
+<b> GET </b> <b>```/users/{username}/reports```</b> — все обращения пользователя <br>
 <i> Path parameters: </i> <br>
 ```username```: ```string (english)``` — имя пользователя <br>
 <i> Headers: </i> <br>
 ```xxx-token```: ```integer``` — токен авторизации <br>
 <br>
-<i> Redirect on: </i> <b> GET </b> /reports/{username} <br>
+<i> Redirect on: </i> <b> GET </b> <b>/reports/{username}</b> <br>
 
 ### /reports — сообщения об ошибках
 Данные запросы завершаются ошибкой при неверных данных пользователя (id или имя пользователя) и токенах авторизации. <br>
 При попытке манипуляции с сообщениями проверяется принадлежность токена пользователю. <br>
 
-<b> POST </b> ```/reports``` — отправить сообщение об ошибке <br>
+<b> POST </b> <b>```/reports```</b> — отправить сообщение об ошибке <br>
 <i> Body parameters: </i> <br>
 ```text```: ```string``` — сообщение об ошибке <br>
 ```user_id```: ```integer``` — id пользователя <br>
@@ -71,7 +71,7 @@ Program {
 ```message```: ```string``` — сообщение об ошибке/успехе <br>
 ```success```: ```boolean``` — создано/не создано <br>
 <br>
-<b> GET </b> ```/reports/{username}``` — получить все сообщения об ошибке от пользователя <br>
+<b> GET </b> <b>```/reports/{username}```</b> — получить все сообщения об ошибке от пользователя <br>
 <i> Path parameters: </i> <br>
 ```username```: ```string (english)``` — имя пользователя <br>
 <br>
@@ -91,7 +91,7 @@ ReportResponse {
 }
 ```
 
-<b> DELETE </b> ```/reports/{report_id}``` — удалить сообщение об ошибке <br>
+<b> DELETE </b> <b>```/reports/{report_id}```</b> — удалить сообщение об ошибке <br>
 <i> Path parameters: </i> <br>
 ```report_id```: ```integer``` — id обращения <br>
 <br>
@@ -103,7 +103,7 @@ ReportResponse {
 ```message```: ```string``` — сообщение об ошибке/успехе <br>
 ```success```: ```boolean``` — удалено/не удалено <br>
 <br>
-<b> PUT </b> ```/reports/{report_id}```  — изменить сообщение об ошибке <br>
+<b> PUT </b> <b>```/reports/{report_id}```</b>  — изменить сообщение об ошибке <br>
 <i> Path parameters: </i> <br>
 ```report_id```: ```integer``` — id обращения <br>
 <br>
