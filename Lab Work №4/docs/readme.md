@@ -121,7 +121,7 @@ ReportResponse {
 <br>
 
 ## Тестирование API
-<b> GET /programs </b><br>
+<b> GET ```/programs``` </b><br>
 Тестируется запрос программ
 ```
 pm.test("Verify status code is 200", function () {
@@ -138,7 +138,7 @@ pm.test("Success response", function () {
 <br>
 ![plot](Screenshots/programs2.png)
 <br>
-<b> POST /users/create </b><br>
+<b> POST ```/users/create``` </b><br>
 Тестируется невозможность создать пользователя с тем же именем
 ```
 pm.test("Verify status code is 400", function () {
@@ -155,7 +155,7 @@ pm.test("Message 9s Username already used", function () {
 <br>
 ![plot](Screenshots/users_create2.png)
 <br>
-<b> POST /users/login </b><br>
+<b> POST ```/users/login``` </b><br>
 Тестируется возможность войти в систему
 ```
 pm.test("Verify status code is 200", function () {
@@ -172,7 +172,7 @@ pm.test("Check if logged in", function () {
 <br>
 ![plot](Screenshots/users_login2.png)
 <br>
-<b> GET /users/{username}/reports </b><br>
+<b> GET ```/users/{username}/reports``` </b><br>
 Получение пользователем сообщений об ошибке
 ```
 pm.test("Verify status code is 200", function () {
@@ -189,7 +189,7 @@ pm.test("Success response", function () {
 <br>
 ![plot](Screenshots/user_reports2.png)
 <br>
-<b> POST /reports </b><br>
+<b> POST ```/reports``` </b><br>
 Отправка сообщения об ошибке
 ```
 pm.test("Verify status code is 201", function () {
@@ -208,7 +208,7 @@ pm.test("Check if posted", function () {
 <br>
 ![plot](Screenshots/post3.png)
 <br>
-<b> GET /reports/{username} </b><br>
+<b> GET ```/reports/{username}``` </b><br>
 Получение сообщений об ошибках
 ```
 pm.test("Verify status code is 200", function () {
@@ -225,7 +225,7 @@ pm.test("Check length", function () {
 <br>
 ![plot](Screenshots/reports2.png)
 <br>
-<b> DELETE /reports/{report_id} </b><br>
+<b> DELETE ```/reports/{report_id``` </b><br>
 Удалить сообщение об ошибке
 ```
 pm.test("Verify status code is 200", function () {
@@ -241,7 +241,7 @@ pm.test("Check if deleted", function () {
 <br>
 ![plot](Screenshots/delete_report2.png)
 <br>
-<b> PUT /reports/{report_id} </b><br>
+<b> PUT ```/reports/{report_id}``` </b><br>
 Изменить сообщение об ошибке
 ```
 pm.test("Verify status code is 202", function () {
