@@ -123,6 +123,7 @@ ReportResponse {
 
 ## Тестирование API
 <b> GET /programs </b><br>
+Тестируется запрос программ
 ```
 pm.test("Verify status code is 200", function () {
     pm.response.to.have.status(200);
@@ -156,6 +157,7 @@ pm.test("Message 9s Username already used", function () {
 ![plot](Screenshots/users_create2.png)
 <br>
 <b> POST /users/login </b><br>
+Тестируется возможность войти в систему
 ```
 pm.test("Verify status code is 200", function () {
     pm.response.to.have.status(200);
@@ -172,6 +174,7 @@ pm.test("Check if logged in", function () {
 ![plot](Screenshots/users_login2.png)
 <br>
 <b> GET /users/{username}/reports </b><br>
+Получение пользователем сообщений об ошибке
 ```
 pm.test("Verify status code is 200", function () {
     pm.response.to.have.status(200);
@@ -188,6 +191,7 @@ pm.test("Success response", function () {
 ![plot](Screenshots/user_reports2.png)
 <br>
 <b> POST /reports </b><br>
+Отправка сообщения об ошибке
 ```
 pm.test("Verify status code is 201", function () {
     pm.response.to.have.status(201);
@@ -206,6 +210,7 @@ pm.test("Check if posted", function () {
 ![plot](Screenshots/post3.png)
 <br>
 <b> GET /reports/{username} </b><br>
+Получение сообщений об ошибках
 ```
 pm.test("Verify status code is 200", function () {
     pm.response.to.have.status(200);
@@ -222,6 +227,7 @@ pm.test("Check length", function () {
 ![plot](Screenshots/reports2.png)
 <br>
 <b> DELETE /reports/{report_id} </b><br>
+Удалить сообщение об ошибке
 ```
 pm.test("Verify status code is 200", function () {
     pm.response.to.have.status(200);
@@ -237,6 +243,7 @@ pm.test("Check if deleted", function () {
 ![plot](Screenshots/delete_report2.png)
 <br>
 <b> PUT /reports/{report_id} </b><br>
+Изменить сообщение об ошибке
 ```
 pm.test("Verify status code is 202", function () {
     pm.response.to.have.status(202);
@@ -257,6 +264,5 @@ pm.test("Check if updated", function () {
 Разработанные endpoint можно увидеть [здесь](../src/__main__.py). <br>
 Для валидации данных и форматирования данных используются возможность фреймворков FastAPI и Pydantic. <br>
 В ходе тестирования удалось найти ошибки, исправленные впоследствии. Набор тестов приложен в виде [коллеции Postman](postman_collection.json). <br>
-[Скриншоты тестирования](Screenshots).
 
 
