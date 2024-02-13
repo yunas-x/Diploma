@@ -45,7 +45,7 @@ Program {
 ```username```: string — имя пользователя (не менее 5 символов) <br>
 ```message```: string — сообщение об ошибке/успехе <br>
 ```success```: boolean — создано/не создано <br>
-token: integer — токен авторизации <br>
+```token```: integer — токен авторизации <br>
 <br>
 <b> GET </b> /users/{username}/reports — все обращения пользователя <br>
 <i> Path parameters: </i> <br>
@@ -85,11 +85,13 @@ token: integer — токен авторизации <br>
 ```success```: boolean — получено/не найдено <br>
 ```reports```: array[ReportResponse] — cообщения указанного пользователя <br>
 <br>
-ReportResponse { <br>
-text: string — сообщение <br>
-id: integer — ID сообщения об ошибке <br>
-posted_on: string(date-time) — дата отправки <br>
-} <br>
+```
+ReportResponse {
+text: string — сообщение
+id: integer — ID сообщения об ошибке
+posted_on: string(date-time) — дата отправки
+}
+```
 <br>
 <b> DELETE </b> /reports/{report_id} — удалить сообщение об ошибке <br>
 <i> Path parameters: </i> <br>
