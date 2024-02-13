@@ -115,10 +115,9 @@ ReportResponse {
 ```user_id```: ```integer``` — id пользователя <br>
 <br>
 <i> Response: </i> <br>
-```text```: ```string``` — текст сообщения в поддержку
-```status```: ```boolean``` — обновлено/не обновлено
+```text```: ```string``` — текст сообщения в поддержку <br>
+```status```: ```boolean``` — обновлено/не обновлено <br>
 ```message```: ```string``` — сообщение об ошибке/успехе <br>
-<br>
 
 ## Тестирование API
 <b> GET ```/programs``` </b><br>
