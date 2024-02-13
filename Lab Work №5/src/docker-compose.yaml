@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: app
+    expose:
+      - "5000"
+    depends_on:
+      - db
+    environment:
+      - API_TOKEN=$API_TOKEN
+      - POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING
+    deploy:
+      replicas: 3
+    restart: unless-stopped
+
+  nginx-balancer:
+    image: nginx
+    container_name: nginx-balancer
+    restart: unless-stopped
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+    ports:
+      - "82:4000"
+
+  db:
+    container_name: postgres_container
+    image: postgres:15-alpine
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data/
+      - ./db_init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
