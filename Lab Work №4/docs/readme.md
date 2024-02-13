@@ -91,7 +91,7 @@ ReportResponse {
         posted_on: string(date-time) — дата отправки
 }
 ```
-<br>
+
 <b> DELETE </b> /reports/{report_id} — удалить сообщение об ошибке <br>
 <i> Path parameters: </i> <br>
 ```report_id```: int — id обращения <br>
