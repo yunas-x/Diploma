@@ -211,6 +211,8 @@ pm.test("Check if posted", function () {
 <br>
 ![plot](Screenshots/post3.png)
 <br>
+![plot](Screenshots/post_reports_test.png)
+<br>
 <b> GET ```/reports/{username}``` </b><br>
 Получение сообщений об ошибках
 ```
