@@ -262,6 +262,8 @@ pm.test("Check if updated", function () {
 <br>
 ![plot](Screenshots/reports_put2.png)
 <br>
+![plot](Screenshots/put_reports.png)
+<br>
 
 ## Дополнительно
 Более подробное описание потоков сообщений для реализованных методов в [Swagger](openapi.yaml). <br>
