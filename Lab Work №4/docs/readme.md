@@ -171,6 +171,8 @@ pm.test("Check if logged in", function () {
 <br>
 ![plot](Screenshots/users_login2.png)
 <br>
+![plot](Screenshots/login_tests.png)
+<br>
 <b> GET ```/users/{username}/reports``` </b><br>
 Получение пользователем сообщений об ошибке
 ```
@@ -187,6 +189,8 @@ pm.test("Success response", function () {
 ![plot](Screenshots/user_reports1.png)
 <br>
 ![plot](Screenshots/user_reports2.png)
+<br>
+![plot](Screenshots/get_tests.png)
 <br>
 <b> POST ```/reports``` </b><br>
 Отправка сообщения об ошибке
