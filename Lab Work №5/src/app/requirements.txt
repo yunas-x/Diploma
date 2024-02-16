@@ -1,6 +1,0 @@
-gunicorn
-fastapi
-uvicorn
-sqlalchemy
-psycopg2-binary
-annotated-types
