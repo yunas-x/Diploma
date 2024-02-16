@@ -137,6 +137,8 @@ pm.test("Success response", function () {
 <br>
 ![plot](Screenshots/programs2.png)
 <br>
+![plot](Screenshots/programs_test.png)
+<br>
 <b> POST ```/users/create``` </b><br>
 Тестируется невозможность создать пользователя с тем же именем
 ```
@@ -153,6 +155,8 @@ pm.test("Message 9s Username already used", function () {
 ![plot](Screenshots/users_create1.png)
 <br>
 ![plot](Screenshots/users_create2.png)
+<br>
+![plot](Screenshots/user_test.png)
 <br>
 <b> POST ```/users/login``` </b><br>
 Тестируется возможность войти в систему
@@ -190,7 +194,7 @@ pm.test("Success response", function () {
 <br>
 ![plot](Screenshots/user_reports2.png)
 <br>
-![plot](Screenshots/get_tests.png)
+![plot](Screenshots/user_reports_test.png)
 <br>
 <b> POST ```/reports``` </b><br>
 Отправка сообщения об ошибке
@@ -230,6 +234,8 @@ pm.test("Check length", function () {
 <br>
 ![plot](Screenshots/reports2.png)
 <br>
+![plot](Screenshots/get_tests.png)
+<br>
 <b> DELETE ```/reports/{report_id``` </b><br>
 Удалить сообщение об ошибке
 ```
@@ -245,6 +251,8 @@ pm.test("Check if deleted", function () {
 ![plot](Screenshots/delete_report1.png)
 <br>
 ![plot](Screenshots/delete_report2.png)
+<br>
+![plot](Screenshots/deleted_test.png)
 <br>
 <b> PUT ```/reports/{report_id}``` </b><br>
 Изменить сообщение об ошибке
