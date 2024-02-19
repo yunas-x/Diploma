@@ -25,8 +25,9 @@ Program {
 
 <b> GET </b> <b>```/programs/fields```</b> — получить все направления подготовки высшего образования <br>
 <br>
+<i> Headers: </i> <br>
+```Authorization```: ```string``` — токен авторизации <br>
 <i> Response: </i> <br>
-```programs```: ```array[Field]``` — Список направлений подготовки высшего образования <br>
 ```
 Field {
         field_code: string(^[0-5][0-9]\.0[3-5]\.[0-1][1-9]$) — код направления подготовки
@@ -170,6 +171,23 @@ pm.test("Message 9s Username already used", function () {
 ![plot](Screenshots/users_create2.png)
 <br>
 ![plot](Screenshots/user_test.png)
+<br>
+<b> GET </b> <b>```/programs/fields```</b> — получить все направления подготовки высшего образования <br>
+```
+pm.test("Verify status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("Check length", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.length).greaterThan(20);
+});
+```
+![plot](Screenshots/fields_test.png)
+<br>
+![plot](Screenshots/fields_test2.png)
+<br>
+![plot](Screenshots/fields_test3.png)
 <br>
 <b> POST ```/users/login``` </b><br>
 Тестируется возможность войти в систему
