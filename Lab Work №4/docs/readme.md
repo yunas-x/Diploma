@@ -27,6 +27,7 @@ Program {
 <br>
 <i> Headers: </i> <br>
 ```Authorization```: ```string``` — токен авторизации <br>
+<br>
 <i> Response: </i> <br>
 ```
 Field {
