@@ -29,6 +29,7 @@ Program {
 ```Authorization```: ```string``` — токен авторизации <br>
 <br>
 <i> Response: </i> <br>
+```fields_of_study```: ```array[Field]``` — Список программ высшего образования <br>
 ```
 Field {
         field_code: string(^[0-5][0-9]\.0[3-5]\.[0-1][1-9]$) — код направления подготовки
