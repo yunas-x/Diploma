@@ -309,4 +309,5 @@ pm.test("Check if updated", function () {
 ## Дополнительно
 Более подробное описание потоков сообщений для реализованных методов в [Swagger](openapi.yaml). <br>
 Разработанные endpoint можно увидеть [здесь](../src/__main__.py). <br>
+Коллекция [Postman](BI_Curricula.postman_collection.json). <br>
 Для валидации данных и форматирования данных используются возможность фреймворков FastAPI и Pydantic. <br>
