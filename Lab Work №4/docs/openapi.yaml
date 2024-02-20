@@ -7,6 +7,26 @@ info:
     Пермь в рамках обучения.
   version: 0.1.4
 paths:
+  /programs/fields:
+    get:
+      tags:
+        - programs
+      summary: Список направлений подготовки
+      description: Список направлений подготовки, для которых найдены программы
+      operationId: get_field_codes_programs_fields_get
+      responses:
+        '200':
+          description: List of programms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldsResponse'
+        '401':
+          description: Invalid Token (or not provided)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
   /users/create:
     post:
       tags:
@@ -419,15 +439,6 @@ components:
         - offset
         - programs
       title: ProgramsResponse
-    Report:
-      properties:
-        text:
-          type: string
-          title: Текст сообщения
-      type: object
-      required:
-        - text
-      title: Report
     ReportRequest:
       properties:
         text:
@@ -598,3 +609,35 @@ components:
         - success
         - token
       title: UserTokenResponse
+    FieldsResponse:
+      properties:
+        fields:
+          items:
+            $ref: '#/components/schemas/Field'
+          type: array
+          title: Field Codes
+      type: object
+      required:
+        - field_codes
+      title: FieldsResponse
+    Field:
+      properties:
+        field_code:
+          type: string
+          title: Field Code
+        field_name:
+          type: string
+          title: Field Name
+        field_group_code:
+          type: string
+          title: Field Group Code
+        field_group_name:
+          type: string
+          title: Field Group Name
+      type: object
+      required:
+        - field_code
+        - field_name
+        - field_group_code
+        - field_group_name
+      title: FieldOfStudy
