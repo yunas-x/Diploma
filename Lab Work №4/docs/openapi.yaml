@@ -1,0 +1,643 @@
+openapi: 3.0.0
+info:
+  title: BI Curricula
+  description: |-
+    АПИ к хранилищу данных для облегчения сравнения образовательных программ
+    и их выбора абитуриентом. Выполняется в рамках комадного проекта и дипломного проекта в НИУ ВШЭ
+    Пермь в рамках обучения.
+  version: 0.1.4
+paths:
+  /programs/fields:
+    get:
+      tags:
+        - programs
+      summary: Список направлений подготовки
+      description: Список направлений подготовки, для которых найдены программы
+      operationId: get_field_codes_programs_fields_get
+      responses:
+        '200':
+          description: List of programms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldsResponse'
+        '401':
+          description: Invalid Token (or not provided)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
+  /users/create:
+    post:
+      tags:
+        - users
+      summary: Создать пользователя
+      description: |-
+        Создает тестового пользователя
+        с заданным именем и паролем.
+        Если пользователь с таким именем существует,
+        возвращает 400 ошибку.
+      operationId: users_create_users_create_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: Username occupied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Войти в систему
+      description: Выполняет вход в систему при правильном вводе логина и пароля
+      operationId: users_login_users_login_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTokenResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: Wrong Username or Password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+  /users/{username}/reports:
+    get:
+      tags:
+        - users
+      summary: Вернуть обращения в поддержку
+      description: Возвращает обращения в поддержку для выбранного пользователя
+      operationId: get_users_reports_users__username__reports_get
+      parameters:
+        - name: username
+          description: "Имя пользователя"
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Имя пользователя
+            minLength: 5
+        - name: xxx-token
+          description: "Токен авторизации"
+          in: header
+          required: true
+          schema:
+            type: integer
+            title: Токен авторизации
+      responses:
+        '302':
+          description: Redirect on another route
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /reports:
+    post:
+      tags:
+        - reports
+      summary: Отправить обращение в поддержку
+      description: Отправляет обращение в поддержку
+      operationId: send_report_reports_post
+      parameters:
+        - name: xxx-token
+          description: "Токен авторизации"
+          in: header
+          required: true
+          schema:
+            type: integer
+            title: Токен авторизации
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: Cannot post a report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResponse'
+        '401':
+          description: Invalid auth xxx_token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
+  /reports/{username}:
+    get:
+      tags:
+        - reports
+      summary: Вернуть обращения в поддержку
+      description: Возвращает обращения в поддержку для выбранного пользователя
+      operationId: get_reports_by_user_id_reports__username__get
+      parameters:
+        - name: username
+          description: "Имя пользователя"
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Имя пользователя
+        - name: xxx-token
+          description: "Токен авторизации"
+          in: header
+          required: true
+          schema:
+            type: integer
+            title: Токен авторизации
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '404':
+          description: Reports do not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportsResponse'
+        '401':
+          description: Invalid auth xxx_token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
+  /reports/{report_id}:
+    put:
+      tags:
+        - reports
+      summary: Изменить обращение в поддержку
+      description: Изменить выбранное обращение в поддержку
+      operationId: modify_report_reports_put
+      parameters:
+        - name: report_id
+          description: "ID сообщения"
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: ID сообщения
+        - name: xxx-token
+          description: "Токен авторизации"
+          in: header
+          required: true
+          schema:
+            type: integer
+            title: Токен авторизации
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+        required: true
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: No such report to update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResponse'
+        '401':
+          description: Invalid auth xxx_token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
+        '403':
+          description: You cannot change this report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
+    delete:
+      summary: Удалить обращение в поддержку
+      description: Удалить выбранное обращение в поддержку
+      operationId: delete_report_reports__report_id__delete
+      tags:
+        - reports
+      parameters:
+        - name: report_id
+          description: "ID сообщения"
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: ID сообщения
+        - name: xxx-token
+          description: "Токен авторизации"
+          in: header
+          required: true
+          schema:
+            type: integer
+            title: Токен авторизации
+        - name: xxx-userdata
+          description: "ID пользователя"
+          in: header
+          required: true
+          schema:
+            type: integer
+            title: ID пользователя
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        '401':
+          description: Invalid auth xxx_token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
+        '403':
+          description: You are not allowed to delete this report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPAuthError'
+  /programs:
+    get:
+      tags:
+        - programs
+      summary: Список программ
+      description: Получает список программ
+      operationId: get_program_on_programs_get
+      parameters:
+        - name: offset
+          description: "Оффсет запроса"
+          in: query
+          schema:
+            anyOf:
+              - type: integer
+            title: Оффсет запроса
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgramsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgramsResponse'
+components:
+  schemas:
+    DeleteResponse:
+      properties:
+        status:
+          type: boolean
+          title: Удалено/Не удалено
+        message:
+          type: string
+          title: Сообщение об ошибке/успехе
+      type: object
+      required:
+        - status
+        - message
+      title: DeleteResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Детали
+      type: object
+      title: HTTPValidationError
+    HTTPAuthError:
+      properties:
+        detail:
+          type: string
+          title: Детали
+      type: object
+      title: HTTPValidationError
+    Program:
+      properties:
+        program_name:
+          type: string
+          title: Название программы
+        degree_id:
+          type: integer
+          title: Уровень обучения
+        field_code:
+          type: string
+          title: Направление подготовки (Код ОК 009-2016)
+        university_id:
+          type: integer
+          title: ID университета
+      type: object
+      required:
+        - program_name
+        - degree_id
+        - field_code
+        - university_id
+      title: Program
+    ProgramsResponse:
+      properties:
+        offset:
+          type: integer
+          title: Оффсет базы данных
+        programs:
+          items:
+            $ref: '#/components/schemas/Program'
+          type: array
+          title: Список программ высшего образования
+      type: object
+      required:
+        - offset
+        - programs
+      title: ProgramsResponse
+    ReportRequest:
+      properties:
+        text:
+          type: string
+          title: Текст сообщения
+        user_id:
+          type: integer
+          title: Id пользователя
+      type: object
+      required:
+        - text
+        - user_id
+      title: ReportRequest
+    ReportsResponse:
+      properties:
+        status:
+          type: boolean
+          title: Получено/Не найдено
+        user_id:
+          anyOf:
+            - type: integer
+          title: Id пользователя
+        reports:
+          anyOf:
+            - items:
+                $ref: '#/components/schemas/ReportResponse'
+              type: array
+          title: Сообщения указанного пользователя
+        message:
+          type: string
+          title: Сообщение об ошибке/успехе
+      type: object
+      required:
+        - status
+        - user_id
+        - reports
+        - message
+      title: ReportsResponse
+    UpdateResponse:
+      properties:
+        text:
+          type: string
+          title: Текст сообщения в поддержку
+        status:
+          type: boolean
+          title: Обновлено/Не обновлено (Отправлено/Не отправлено)
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+        - text
+        - status
+        - message
+      title: UpdateResponse
+    UserRequest:
+      properties:
+        username:
+          type: string
+          minLength: 5
+          title: Имя пользователя
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          minLength: 8
+          title: Пароль
+      type: object
+      required:
+        - username
+        - email
+        - password
+      title: UserRequest
+    UserLogin:
+      properties:
+        username:
+          type: string
+          minLength: 5
+          title: Имя пользователя
+        password:
+          type: string
+          minLength: 8
+          title: Пароль
+      type: object
+      required:
+        - username
+        - email
+        - password
+      title: UserRequest
+    ReportResponse:
+      properties:
+        text:
+          type: string
+          title: Сообщение
+        id:
+          type: integer
+          title: ID сообщения об ошибке
+        posted_on:
+          type: string
+          format: date-time
+          title: Дата отправки
+      type: object
+      required:
+        - text
+        - id
+        - posted_on
+      title: ReportResponse
+    UserResponse:
+      properties:
+        username:
+          type: string
+          minLength: 5
+          title: Имя пользователя
+        message:
+          type: string
+          title: Сообщение об ошибке/успехе
+        success:
+          type: boolean
+          title: Создано/Не создано
+      type: object
+      required:
+        - username
+        - message
+        - success
+      title: UserResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
+    UserTokenResponse:
+      properties:
+        username:
+          type: string
+          minLength: 5
+          title: Имя пользователя
+        message:
+          type: string
+          title: Сообщение об ошибке/успехе
+        success:
+          type: boolean
+          title: Создано/Не создано
+        token:
+          type: integer
+          title: Токен авторизации
+      type: object
+      required:
+        - username
+        - message
+        - success
+        - token
+      title: UserTokenResponse
+    FieldsResponse:
+      properties:
+        fields:
+          items:
+            $ref: '#/components/schemas/Field'
+          type: array
+          title: Field Codes
+      type: object
+      required:
+        - field_codes
+      title: FieldsResponse
+    Field:
+      properties:
+        field_code:
+          type: string
+          title: Field Code
+        field_name:
+          type: string
+          title: Field Name
+        field_group_code:
+          type: string
+          title: Field Group Code
+        field_group_name:
+          type: string
+          title: Field Group Name
+      type: object
+      required:
+        - field_code
+        - field_name
+        - field_group_code
+        - field_group_name
+      title: FieldOfStudy

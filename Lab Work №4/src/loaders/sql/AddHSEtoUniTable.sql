@@ -1,0 +1,1 @@
+insert into postgres.public."University"(name) values('Национальный исследовательский университет Высшая Школа Экономики')
