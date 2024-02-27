@@ -83,3 +83,19 @@ class AuthData:
             setattr(result, k, deepcopy(v, memo))
         return result
 ```
+
+### Структурные паттерны
+#### Decorator
+На настоящий момент Decorator в его чистом виде используется редко, вместо это зачастую используют его функциональную альтернативу
+
+![plot](./Images/Decorator.png)
+```
+@app.get("/programs/fields",
+         summary="Список направлений подготовки",
+         description="""Список направлений подготовки, для которых найдены программы""",
+)
+def get_field_codes() -> FieldsResponse:
+    field_codes_rows = select_fields()
+    fields = fields_from_rows(field_codes_rows)
+    return FieldsResponse(field_codes=fields)
+```
