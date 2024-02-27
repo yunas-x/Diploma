@@ -99,3 +99,56 @@ def get_field_codes() -> FieldsResponse:
     fields = fields_from_rows(field_codes_rows)
     return FieldsResponse(field_codes=fields)
 ```
+
+#### Facade
+Данный паттерн используется работе для упрощения запросов к базе данных
+
+```
+class Queries:
+	def select_programs(filter: Optional[dict[str, list]]=None,
+	                    session_maker: sessionmaker[Session]=SessionMaker,
+			    offset: int=0,
+			    limit: int=20):
+	# Query
+
+class FieldsRequests:
+	def get_fields(authorization):
+	    
+	    fields = request(
+	            headers={"Authorization": authorization},
+	            method="GET",
+	            url=fields_url
+	            )
+	    return fields
+
+
+class ProgramsRowsConverter
+	def programs_from_rows(programs_rows, fields) -> list[Program]:
+	    
+	    return [Program(
+	                    program_id=p.program_id,
+	                    program_name=p.program_name,
+	                    degree_id=p.degree_id,
+	                    degree=p.degree_name,
+	                    field_code=p.field_code,
+	                    field_name=fields[p.field_code]["field_name"],
+	                    field_group_code=fields[p.field_code]["field_group_code"],
+	                    field_group_name=fields[p.field_code]["field_group_name"]
+	                   )
+	            for p
+	            in programs_rows
+	    if p.field_code in fields.keys()]
+
+class ProgramQueryAdapter:
+
+	def fields_to_dict(authorization):
+	    return {f["field_code"]: f 
+	              for f 
+	              in get_fields(authorization).json()}
+
+	def get_programs(authorization, offset, limit):
+            programs_rows = select_programs(offset=args.offset,
+		                            limit=args.limit)
+            fields = fields_to_dict(authorization)
+            return ProgramsRowsConverter().programs_from_rows(programs_rows, fields)
+```
