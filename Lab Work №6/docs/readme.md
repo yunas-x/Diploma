@@ -51,3 +51,33 @@ programs_pre_query = session \
         # Тут может добавиться код
         programs = programs_pre_query.all() # выполняется собранный запрос
 ```
+#### Prototype
+Представим метод для копирования объекта AuthData, используемый при авторизации. В Python методы __copy__ и __deepcopy__ зашиты на уровне языка
+```
+class AuthData:
+
+    def __init__(self,
+                 uuid: str,
+                 username: str,
+                 token: str,
+                 created_at: datatime):
+
+        self._uuid = uuid
+	self._username = username
+	self._token = token
+	self._created_at = created_at
+
+    def __copy__(self):
+        cls = self.__class__
+        result = cls.__new__(cls)
+        result.__dict__.update(self.__dict__)
+        return result
+
+    def __deepcopy__(self, memo):
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo[id(self)] = result
+        for k, v in self.__dict__.items():
+            setattr(result, k, deepcopy(v, memo))
+        return result
+```
