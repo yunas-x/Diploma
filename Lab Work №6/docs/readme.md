@@ -103,6 +103,7 @@ def get_field_codes() -> FieldsResponse:
 #### Facade
 Данный паттерн используется работе для упрощения запросов к базе данных
 
+![plot](./Images/Facade.png)
 ```
 class Queries:
 	def select_programs(filter: Optional[dict[str, list]]=None,
@@ -122,7 +123,7 @@ class FieldsRequests:
 	    return fields
 
 
-class ProgramsRowsConverter
+class ProgramsRowsConverter:
 	def programs_from_rows(programs_rows, fields) -> list[Program]:
 	    
 	    return [Program(
