@@ -52,7 +52,7 @@ programs_pre_query = session \
         programs = programs_pre_query.all() # выполняется собранный запрос
 ```
 #### Prototype
-Представим метод для создания объекта AuthData, используемый при авторизации, на основе существующего. В Python методы __copy__ и __deepcopy__ зашиты на уровне языка
+Представим метод для создания объекта AuthData, используемый при авторизации, на основе существующего. В Python методы __copy__ и __deepcopy__ зашиты на уровне языка.
 ![plot](./Images/Prototype.png)
 ```
 class AuthData:
