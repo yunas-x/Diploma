@@ -35,6 +35,7 @@ class ParserFactory:
 ```
 #### Builder
 Класс Query используется для создания запроса к базе данных с помощью ORM.
+![plot](./Images/Builder.png)
 ```
 programs_pre_query = session \
                                     .query(
