@@ -140,15 +140,11 @@ class ProgramsRowsConverter
 	    if p.field_code in fields.keys()]
 
 class ProgramQueryAdapter:
-
-	def fields_to_dict(authorization):
-	    return {f["field_code"]: f 
-	              for f 
-	              in get_fields(authorization).json()}
-
 	def get_programs(authorization, offset, limit):
             programs_rows = select_programs(offset=args.offset,
 		                            limit=args.limit)
-            fields = fields_to_dict(authorization)
+            fields = {f["field_code"]: f 
+	              for f 
+	              in get_fields(authorization).json()}
             return ProgramsRowsConverter().programs_from_rows(programs_rows, fields)
 ```
