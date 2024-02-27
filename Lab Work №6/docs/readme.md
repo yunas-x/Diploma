@@ -5,6 +5,8 @@
 #### Factory
 Используется для порождения парсеров учебных планов, реализующих ParserProtocol. Парсеры резолвятся с помощью встроенного в ParserFactory словаря с возможными парсерами.
 
+![plot](./Images/Factory.png)
+
 ```
 class ParserProtocol(Protocol):
     
