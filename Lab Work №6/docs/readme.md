@@ -213,6 +213,8 @@ class QueryFilterRequestAdapter:
 
 #### Proxy
 В данном примере используем для кэширования
+
+![plot](./Images/Proxy.png)
 ```
 class AuthValidatorProtocol(Protocol):
         @abstractmethod
