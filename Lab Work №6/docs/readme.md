@@ -296,3 +296,36 @@ class AuthValidatorProxy(AuthValidatorProtocol):
 	                      	  created_at=session.created_at
 	                    	 )
 ```
+
+### Поведенческие паттерны
+#### Iterator
+Паттерн Iterator зашит в язык программирования Python как стандартный метод для перебора коллекции. Для этого используются встроенные методы __iter__ (для создания итератора) и метод __next__ для его перебора. Python опускает реализацию метода hasNext, вместо этого выбрасывая исключение StopIteration при отсутствии элемента.
+
+![plot](./Images/Iterator.png)
+```
+class Fields:
+
+	def __init__(self, fields):
+	    self._fields = fields
+
+	def __iter__(self):
+	    return FieldsIterator(self._fields)
+
+class FieldsGroupIterator:
+    	def __iter__(self):
+	    return self
+
+	def __init__(self, fields):
+	    self._fields = fields
+  	    self._idx = 0
+
+	def __next__(self):
+	    while self._idx < len(self._fields):
+		if self._fields[self._idx].group is None:
+		     self._idx += 1
+                     return self._fields[self._idx]
+		self._idx += 1
+			
+	    self._idx = 0
+	    raise StopIteration()
+```
