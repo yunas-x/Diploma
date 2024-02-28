@@ -561,7 +561,194 @@ class Field:
 	obj.field_group_name = response["field_group_name"]
 	obj.field_group_code = response["field_group_code"]
 	return obj
+```
 
+## Шаблоны проектирования GRASP
+### Protected Variations
+• <b>Проблема: </b>необходимо спроектировать систему так, чтобы изменение одних её элементов не влияло на другие <br/>
+• <b>Решение: </b>идентифицировать точки возможных изменений или неустойчивости и распределить обязанности так, чтобы обеспечить устойчивую работу системы <br/>
+• <b>Пример: </b> Реализация паттерна Adapter в контексте данной работы помогла справиться с изменениями почти без рефакторинга существующего кода. Также применена реализация паттерна Prototype с помощью рефлексии, что делает код устойчивым к изменению. Так же частично проблема решается с помощью Polymorphism <br/>
+• <b>Результаты: </b>Внося изменения в одни части программы нет необходимости изменять другие части программы <br/>
+• </b>Связь с другими паттернами: </b>похож на Open Closed Principle в SOLID и частично связан с Полиморфизмом <br/>
+
+### Polymorphism
+• <b>Проблема: </b>необходимо обрабатывать различные варианты поведения на основании типа, допуская замену частей системы <br/>
+• <b>Решение: </b>распределить обязанности между классами с использованием полиморфных операций, оставив каждой внешней системе свой интерфейc <br/>
+• <b>Пример: </b> Полиформная реализация добавления в Базу Данных с помощью завимисимости на базовый класс <br/>
+```
+class BaseModel(DeclarativeBase):
+    """Base class for mappings"""
+    pass
+
+class Query:
+    def add(self, entity: BaseModel):
+        with self._session_maker() as session:
+            try:
+                session.add(entity)
+                session.commit()
+                session.refresh(entity)
+                status = True
+            except:
+                status = False
+                # There will be logging
+        return status
+```
+• <b>Результаты: </b>Подключаемые компоненты системы будут заменяемыми <br/>
+• <b>Связь с другими паттернами: </b> Strategy, так же необходимо соблюдать Liskov Substitution, принципы SOLID в целом <br/>
+
+### Pure Fabrication
+• <b>Проблема: </b> необходимо обеспечивать Low Coupling и High Cohesion <br/>
+• <b>Решение: </b> синтезировать искусственную сущность для обеспечения Low Coupling и High Cohesion <br/> 
+• <b>Пример: </b> см. Facade, Proxy, запросы к Базе Данных <br/>
+• <b>Результаты: </b> Бизнес-логика не смешивается с логикой приложения, на уровне архитектуры лучше поддерживаются Low Coupling и High Cohesion <br/>
+• <b>Связь с другими паттернами: </b> самый яркий вариант реализации — Facade или Proxy <br/>
+
+### Indirection
+• <b>Проблема: </b>необходимо распределить обязанности объектов, избежав прямого связывания <br/>
+• <b>Решение: </b>присвоить обязанности по обеспечению связи между компонентами или службами промежуточному объекту <br/> 
+• <b>Пример: </b> В данной работе использовалось для избегания "хардкода" парсеров в исполняемый код и вынесения логики запросов в отдельный модуль. См. паттерны Strategy или Command <br/>
+• <b>Результаты: </b>Заменяемость частей системы, возможность их повторного использования <br/>
+• <b>Связь с другими паттернами: </b>похож на Dependency Inversion Principle в SOLID, отчасти Strategy или Command <br/>
+
+### Controller
+• <b>Проблема: </b>необходимо обрабатывать входные системные события. Часто события от акторов обрабатываются в многопоточном режиме
+• <b>Решение: </b>назначить обязанность обработки входных системных событий специальному классу (внешний контроллер или контроллеры прецедентов)
+• <b>Пример: </b> Логика фреймворка API <br/>
+```
+@app.get("/programs/fields",
+         summary="Список направлений подготовки",
+         description="""Список направлений подготовки, для которых найдены программы""",
+)
+def get_field_codes() -> FieldsResponse:
+    field_codes_rows = select_fields()
+    fields = fields_from_rows(field_codes_rows)
+    return FieldsResponse(field_codes=fields)
+```
+• <b>Результаты: </b>В бизнес-логике нет многопоточности
+• <b>Связь с другими паттернами: </b>следует принципу разделения ответственности и MVC, отчасти иллюстрирует паттерн Facade <br/>
+
+### Information Expert
+• <b>Проблема: </b>информация в системе должна обрабатываться, аккумулироваться, рассчитываться и т.п. <br/>
+• <b>Решение: </b>назначить соответствующие обязанности тому классу, который её содержит <br/>
+• <b>Пример: </b> Весь Persistance (см. прошлые примеры и данный как продолжение) <br/>
+```
+class Query:
+	def __init__(self, session_maker: sessionmaker[Session]=SessionMaker):
+		self._session_maker = session_maker
+
+	def select_fields(self, fields_codes_filter: list[str]=None):
+	    __fos1 = aliased(FieldOfStudy)
+	    __fos2 = aliased(FieldOfStudy)
+	    with self._session_maker() as session:
+	        fields_pre_query = session \
+	                                    .query(
+	                                           __fos1.field_code,
+	                                           __fos1.field_name,
+	                                           __fos2.field_code.label("field_group_code"),
+	                                           __fos2.field_name.label("field_group_name"),
+	                                    ) \
+	                                    .filter(__fos1.field_group_code==__fos2.field_code) \
+	                                    .order_by(
+	                                              __fos2.field_code,
+	                                              __fos1.field_code
+	                                             )
+	        
+	        if fields_codes_filter:
+	            fields_pre_query = fields_pre_query.filter(__fos1.field_code.in_(fields_codes_filter))
+	            
+	        return fields_pre_query.distinct().all()
+```
+• <b>Результаты: </b>Соблюдается принцип инкапсуляции, уменьшается связанность классов <br/>
+• <b>Связь с другими паттернами: </b>Model (в MVC), объект предметной области <br/>
+
+### Creator
+• <b>Проблема: </b>экземпляры класса необходимо создавать <br/>
+• <b>Решение:  </b>назначить обязанности инстанциирования тому классу, который будет использовать соответствующие экземпляры созданных классов<br/>
+• <b>Пример: </b> Инициализация объекта, отвечающего за связь с базой данных при инициализации объекта отвечающего за отправку запросов <br/>
+```
+class Query:
+	def __init__(self, session_maker: sessionmaker[Session]=SessionMaker):
+		self._session_maker = session_maker
+```
+• <b>Результаты: </b>Соблюдается принцип инкапсуляции, уменьшается связанность классов <br/>
+• <b>Связь с другими паттернами: </b>Abstract Factory, Dependency Injection <br/>
+
+### Low Coupling
+• <b>Проблема: </b>необходимо обеспечивать низкую связанность между классами <br/>
+• <b>Решение: </b>распределить обязанности так, чтобы степень связанности оставалась низкой <br/>
+• <b>Пример: </b>см. Indirection, Factory, Polymorphism <br/>
+• <b>Результаты: </b>Отсутствует необходимость согласованных изменений классов. Классы становятся более пригодны для повторного использования. Классы более легко поддерживать <br/>
+• <b>Связь с другими паттернами: </b>похож на Dependency Inversion Principle​ в SOLID <br/>
+
+### High Cohesion
+• <b>Проблема: </b>необходимо обеспечивать выполнение объектами разнородных функций <br/>
+• <b>Решение: </b>распределить обязанность так, чтобы обеспечить высокое зацепление <br/>
+• <b>Пример: </b>Разделение бизнес-логики в приложении в целом, см. класс Query и логику-запросов Requester<br/>
+```
+class Query:
+        def add(self, entity: BaseModel):
+	        with self._session_maker() as session:
+	            try:
+	                session.add(entity)
+	                session.commit()
+	                session.refresh(entity)
+	                status = True
+	            except:
+	                status = False
+	                # There will be logging
+	        return status
+
+	def __init__(self, session_maker: sessionmaker[Session]=SessionMaker):
+		self._session_maker = session_maker
+
+	def select_fields(self, fields_codes_filter: list[str]=None):
+	    __fos1 = aliased(FieldOfStudy)
+	    __fos2 = aliased(FieldOfStudy)
+	    with self._session_maker() as session:
+	        fields_pre_query = session \
+	                                    .query(
+	                                           __fos1.field_code,
+	                                           __fos1.field_name,
+	                                           __fos2.field_code.label("field_group_code"),
+	                                           __fos2.field_name.label("field_group_name"),
+	                                    ) \
+	                                    .filter(__fos1.field_group_code==__fos2.field_code) \
+	                                    .order_by(
+	                                              __fos2.field_code,
+	                                              __fos1.field_code
+	                                             )
+	        
+	        if fields_codes_filter:
+	            fields_pre_query = fields_pre_query.filter(__fos1.field_code.in_(fields_codes_filter))
+	            
+	        return fields_pre_query.distinct().all()
 
 
 ```
+```
+class Requester(Protocol):
+
+    @abstractmethod
+    def send(self):
+        raise NotImplementedError
+
+class GetRequester(Requester):
+
+    def __init__(self, url, headers):
+	self.url = url
+	self.headers = headers
+	self.authorization = authorization
+
+    def send(self):
+        response = request(
+            method="GET",
+            headers=headers,
+            url=programs_url
+        )
+	if response.ok:
+        	return response.status_code, response.json()
+	else:
+		return response.status_code, dict()
+```
+• <b>Результаты: </b>Несколько контекстов смешивается в одном классе, Классы более легко поддерживать <br/>
+• <b>Связь с другими паттернами: </b>похож на Single Responsibility Principle в SOLID< br/>
