@@ -216,14 +216,14 @@ class QueryFilterRequestAdapter:
 ```
 class AuthValidatorProtocol(Protocol):
         @abstractmethod
-	def validate(session_id: str) -> bool:
+	def validate(session_id: str) -> ApiSession:
 		pass
 
 class AuthValidator(AuthValidatorProtocol):
 	def __init__(self, session_maker: sessionmaker[Session]=SessionMaker):
 		self._session_maker = session_maker
 
-	def validate(session_id: str):
+	def validate(session_id: str) -> ApiSession:
 	    current_time = datetime.utcnow()
 	    two_day_ago = current_time - timedelta(hours=48)
 	    with self._session_maker() as session:
@@ -249,7 +249,7 @@ class AuthValidatorProxy(AuthValidatorProtocol):
 		self._auth_validator = AuthValidator(session_maker)
 		self._cache = TTLCache(maxsize=10, ttl=360)
 
-	def validate(session_id: str) -> bool:
+	def validate(session_id: str) -> ApiSession:
 		try:
 			session = self._cache[session_id]
                         current_time = datetime.utcnow()
