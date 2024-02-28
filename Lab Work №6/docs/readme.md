@@ -309,14 +309,14 @@ class Fields:
 	    self._fields = fields
 
 	def __iter__(self):
-	    return FieldsIterator(self._fields)
+	    return FieldsIterator(self)
 
 class FieldsGroupIterator:
     	def __iter__(self):
 	    return self
 
 	def __init__(self, fields):
-	    self._fields = fields
+	    self._fields = fields._fields
   	    self._idx = 0
 
 	def __next__(self):
