@@ -118,7 +118,7 @@ class Connection:
 
     @property
     def connection(self):
-	return self._sessionmaker
+	return self._sessionmaker()
 ```
 
 ### Структурные паттерны
