@@ -161,6 +161,7 @@ class ProgramQueryAdapter:
 #### Adapter
 При распиливании приложения на сервисы было необходимо добавить логику запроса данных из внешних источников.
 
+![plot](./Images/Adapter.png)
 ```
 class Queries:
 	def __init__(self, session_maker: sessionmaker[Session]=SessionMaker):
@@ -192,7 +193,7 @@ class Queries:
 class QueryFilterRequestAdapter:
 	def __init__(self, url, session_maker: sessionmaker[Session]=SessionMaker):
 		self.queries = Queries(session_maker)
-		self._url = programs_url
+		self._url = url
 
 	def get_fields(self, authorization):
 	    fields_codes_filter = request(
