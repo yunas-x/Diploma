@@ -190,8 +190,8 @@ class Queries:
 
 
 class QueryFilterRequestAdapter:
-	def __init__(self, url):
-		self.queries = Queries()
+	def __init__(self, url, session_maker: sessionmaker[Session]=SessionMaker):
+		self.queries = Queries(session_maker)
 		self._url = programs_url
 
 	def get_fields(self, authorization):
