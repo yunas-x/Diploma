@@ -66,8 +66,16 @@ class AuthData:
 
         self._uuid = uuid
 	self._username = username
-	self._token = token
-	self._created_at = created_at
+	self.token = token
+	self.created_at = created_at
+
+    @property
+    def uuid(self):
+      	return self._uuid
+
+    @property
+    def username(self):
+      	return self.username
 
     def __copy__(self):
         cls = self.__class__
