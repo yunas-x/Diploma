@@ -343,12 +343,15 @@ class ParserProtocol(Protocol):
         body = parse_main_body(payload)
 	return convert_to_json(headers, body)
 
+    @abstractmethod
     def parse_headers(self, payload) -> HeaderInfo:
         raise NotImplementedError
 
+    @abstractmethod
     def parse_main_body(self, payload) -> list[RowInfo]:
         raise NotImplementedError
 
+    @abstractmethod
     def convert_to_json(header_info: HeaderInfo, body_info_list: list[RowInfo]) -> dict:
         raise NotImplementedError
 
@@ -507,3 +510,58 @@ class CurriculaProcesser:
 ```
 
 #### Command
+![plot](./Images/Command.png)
+```
+class Requester(Protocol):
+
+    @abstractmethod
+    def send(self):
+        raise NotImplementedError
+
+class GetRequester(Requester):
+
+    def __init__(self, url, headers):
+	self.url = url
+	self.headers = headers
+	self.authorization = authorization
+
+    def send(self):
+        response = request(
+            method="GET",
+            headers=headers,
+            url=programs_url
+        )
+	if response.ok:
+        	return response.status_code, response.json()
+	else:
+		return response.status_code, dict()
+
+class Field:
+
+    def __init__(field_name, field_code, field_group_name, field_group_code):
+        self.field_name = field_name
+	self.field_code = field_code
+	self.field_group_name = field_group_name
+	self.field_group_code = field_group_code
+
+    @classmethod  
+    def from_requester(cls, requester, request_limit):
+	n = 0
+	while n < request_limit:
+            n += 1
+            status, response = self.requester.send()
+            if status < 400:
+                break
+            if n == request_limit:
+	    return
+
+	obj = cls()
+	obj.field_name = response["field_name"]
+	obj.field_code = response["field_code"]
+	obj.field_group_name = response["field_group_name"]
+	obj.field_group_code = response["field_group_code"]
+	return obj
+
+
+
+```
