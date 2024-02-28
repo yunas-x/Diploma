@@ -137,6 +137,54 @@ def get_field_codes() -> FieldsResponse:
     return FieldsResponse(field_codes=fields)
 ```
 
+Более ортодоксальный вариант применения для кэширования запросов к Базе Данных
+![plot](./Images/Decorator2.png)
+```
+class QueryProtocol(Protocol):
+
+        @abstractmethod
+	def __init__(self, session_maker: sessionmaker[Session]=SessionMaker):
+		self._session_maker = session_maker
+
+        @abstractmethod
+	def select_by(program_name: str) -> list[Program]:
+		pass
+
+class Query(QueryProtocol):
+	def __init__(self, session_maker: sessionmaker[Session]=SessionMaker):
+		self._session_maker = session_maker
+
+	def select_by(program_name: str) -> list[Program]:
+	    with session_maker() as session:
+	        programs_pre_query = session \
+	                                    .query(
+	                                           MVP_API.program_id,
+	                                           MVP_API.program_name,
+	                                           MVP_API.field_code,
+	                                           MVP_API.degree_id,
+			                           Degree.name.label("degree_name")
+                                                   ) \
+	                                    .filter(MVP_API.degree_id==Degree.id) \
+                                            .filter(MVP_API.program_name==program_name.id)
+
+    	return programs_pre_query.all()
+
+class QueryDecorator(QueryProtocol):
+	def __init__(self, session_maker: sessionmaker[Session]=SessionMaker):
+		self._query = QueryProtocol(session_maker)
+		self._cache = TTLCache(maxsize=10, ttl=360)
+
+	def select_by(program_name: str) -> list[Program]:
+		try:
+			programs = self._cache["program_name"]
+  
+		except KeyError:
+			programs = self._query.select_by(program_name)
+			self._cache["program_name"] = programs
+
+    		return programs
+```
+
 #### Facade
 Данный паттерн используется работе для упрощения запросов к базе данных
 
@@ -282,14 +330,14 @@ class AuthValidatorProxy(AuthValidatorProtocol):
 
 	def validate(session_id: str) -> ApiSession:
 		try:
-			session = self._cache[session_id]
+			session = self._cache["session_id"]
                         current_time = datetime.utcnow()
 			two_day_ago = current_time - timedelta(hours=48)
 			if session.created_at < two_day_ago:
 				return None
 		except KeyError:
 			session = self._auth_validator.validate(session_id)
-			self._cache[session_id] = session
+			self._cache["session_id"] = session
 
     		return ApiSession(
 	                      	  session_id=session.session_id,
