@@ -52,7 +52,7 @@ programs_pre_query = session \
         programs = programs_pre_query.all() # выполняется собранный запрос
 ```
 #### Prototype
-Представим метод для создания объекта AuthData, используемый при авторизации, на основе существующего. В Python методы __copy__ и __deepcopy__ зашиты на уровне языка, поэтому в данном примере их наследование опущено.
+Представим метод для создания объекта AuthData, используемый при авторизации, на основе существующего. В Python методы __copy__ и __deepcopy__ зашиты на уровне языка и переопределены с помощью рефлексии, поэтому в данном примере их наследование опущено.
 
 ![plot](./Images/Prototype.png)
 ```
@@ -93,9 +93,9 @@ class AuthData:
 
  
 import copy
-data = AuthData("a", "b", "uuid", datetime.now())
-new_data = copy.deepcopy(data)
-data.token = "token"
+data = AuthData("a", "b", "uuid", datetime.now()) # старый объект
+new_data = copy.deepcopy(data) # копия
+new_data.token = "token"
 ```
 
 ### Структурные паттерны
