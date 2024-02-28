@@ -90,6 +90,12 @@ class AuthData:
         for k, v in self.__dict__.items():
             setattr(result, k, deepcopy(v, memo))
         return result
+
+ 
+import copy
+data = AuthData("a", "b", "uuid", datetime.now())
+new_data = copy.deepcopy(data)
+data.token = "token"
 ```
 
 ### Структурные паттерны
