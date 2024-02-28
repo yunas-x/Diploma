@@ -114,14 +114,14 @@ def get_field_codes() -> FieldsResponse:
 ![plot](./Images/Facade.png)
 ```
 class Queries:
-	def select_programs(filter: Optional[dict[str, list]]=None,
+	def select_programs(self, filter: Optional[dict[str, list]]=None,
 	                    session_maker: sessionmaker[Session]=SessionMaker,
 			    offset: int=0,
 			    limit: int=20):
 	# Query
 
 class FieldsRequests:
-	def get_fields(authorization):
+	def get_fields(self, authorization):
 	    
 	    fields = request(
 	            headers={"Authorization": authorization},
@@ -132,7 +132,7 @@ class FieldsRequests:
 
 
 class ProgramsRowsConverter:
-	def programs_from_rows(programs_rows, fields) -> list[Program]:
+	def programs_from_rows(self, programs_rows, fields) -> list[Program]:
 	    
 	    return [Program(
 	                    program_id=p.program_id,
@@ -149,11 +149,63 @@ class ProgramsRowsConverter:
 	    if p.field_code in fields.keys()]
 
 class ProgramQueryAdapter:
-	def get_programs(authorization, offset, limit):
+	def get_programs(self, authorization, offset, limit):
             programs_rows = select_programs(offset=args.offset,
 		                            limit=args.limit)
             fields = {f["field_code"]: f 
 	              for f 
 	              in get_fields(authorization).json()}
             return ProgramsRowsConverter().programs_from_rows(programs_rows, fields)
+```
+
+#### Adapter
+При распиливании приложения на сервисы было необходимо добавить логику запроса данных из внешних источников.
+
+```
+class Queries:
+	def __init__(self, session_maker: sessionmaker[Session]=SessionMaker):
+		self._session_maker = session_maker
+
+	def select_fields(self, fields_codes_filter: list[str]=None):
+	    __fos1 = aliased(FieldOfStudy)
+	    __fos2 = aliased(FieldOfStudy)
+	    with self._session_maker() as session:
+	        fields_pre_query = session \
+	                                    .query(
+	                                           __fos1.field_code,
+	                                           __fos1.field_name,
+	                                           __fos2.field_code.label("field_group_code"),
+	                                           __fos2.field_name.label("field_group_name"),
+	                                    ) \
+	                                    .filter(__fos1.field_group_code==__fos2.field_code) \
+	                                    .order_by(
+	                                              __fos2.field_code,
+	                                              __fos1.field_code
+	                                             )
+	        
+	        if fields_codes_filter:
+	            fields_pre_query = fields_pre_query.filter(__fos1.field_code.in_(fields_codes_filter))
+	            
+	        return fields_pre_query.distinct().all()
+
+
+class QueryFilterRequestAdapter:
+	def __init__(self, url):
+		self.queries = Queries()
+		self._url = programs_url
+
+	def get_fields(self, authorization):
+	    fields_codes_filter = request(
+	            method="GET",
+	            headers={"Authorization": authorization},
+	            url=self._url
+	        )
+	    
+	    return fields_codes_filter
+
+	def select_fields(self, authorization):
+		fields_codes_filter = [f['field_code']
+                                       for f
+                                       in self.get_fields(authorization).json()["field_codes"]]
+		return select_fields(fields_codes_filter)
 ```
