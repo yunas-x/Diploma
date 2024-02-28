@@ -329,3 +329,102 @@ class FieldsGroupIterator:
 	    self._idx = 0
 	    raise StopIteration()
 ```
+
+#### Template Method
+Используем, чтобы декомпозировать верхнеуровнево парсинг учебных планов. Создадим два метода, один из которых читает служебную информацию, а другой — основное содержание
+
+![plot](./Images/Template.png)
+```
+class ParserProtocol(Protocol):
+    """The uniform interface all parsers shall follow"""
+    
+    def parse(self, payload) -> dict:
+	headers = parse_headers(payload)
+        body = parse_main_body(payload)
+	return convert_to_json(headers, body)
+
+    def parse_headers(self, payload) -> HeaderInfo:
+        raise NotImplementedError
+
+    def parse_main_body(self, payload) -> list[BodyRowInfo]:
+        raise NotImplementedError
+
+    def convert_to_json(header_info: HeaderInfo, body_info_list: list[BodyRowInfo]) -> dict:
+        raise NotImplementedError
+
+class BasicParser(ParserProtocol):
+
+    @override
+    def convert_to_json(header_info: HeaderInfo, body_info_list: list[BodyRowInfo]) -> dict:
+        json_dict = {
+		"ProgramInfo": {
+		        "name": header_info.programme_name,
+		        "fields_of_study": __get_fields_of_study(header_info),
+		        "degree": __get_degree(header_info),
+		        "yearEnrolled": header_info.enrollment_year,
+		        "courses": __get_courses(body_info_list)
+            	 }
+        }
+
+    return json_dict
+
+    @override
+    def parse_header(payload):
+        header_info = HeaderInfo()
+	
+        header_info.speciality_codes = get_speciality_codes(payload)
+        header_info.speciality_names = get_speciality_name_list(payload)
+        header_info.programme_name = get_programme_name(payload)
+        header_info.faculty = get_faculty(payload)
+        header_info.enrollment_year = get_enrollment_year(payload)
+        header_info.study_year_count = get_study_year_count(payload)
+        header_info.degree = get_degree(payload)
+        return = header_info
+
+   @override
+   def parse_body(payload) -> list[BodyRowInfo]:
+       first_row = document_df.iloc[0, :]
+
+       has_course_type_column = find_first_index(first_row, "Вид") is not None
+       credits_col_index = find_first_index(first_row, "Трудоемкость")
+       last_col_index = len(document_df.columns) - 1
+
+       body_info_list = []
+
+       for row_index, row in document_df.iterrows():
+	        row_values = row.tolist()
+	        first_value = row_values[0]
+	
+	        if not isinstance(first_value, str) or not first_value.isdigit():
+	            continue
+	
+	        # if row's "Код цикла" isn't "1", not change specialization name
+	        # otherwise, try to find name in previous rows
+	        possible_specialization = try_define_specialization(document_df, row_index, first_value)
+	        if possible_specialization is not None:
+	            specialization = possible_specialization
+	
+	        body_info = BodyRowInfo()
+	        body_info.specialization = specialization
+	        body_info.course_name = row_values[1]
+	
+	        if has_course_type_column:
+	            body_info.course_type = CourseType(row_values[2])
+	        else:
+	            previous_course_type = define_course_type(document_df, row_index, previous_course_type)
+	            body_info.course_type = previous_course_type
+	
+	        credits_list, years = __get_credits_and_years(row_values, credits_col_index, last_col_index)
+	        body_info.credits.extend(credits_list)
+	        body_info.course_years.extend(years)
+	
+	        last_value = row_values[last_col_index]
+	
+	        # value might be undefined
+	        if isinstance(last_value, str):
+	            body_info.competence_codes = [code.strip() for code in last_value.split(",") if code.strip() != ""]
+	
+	        body_info_list.append(body_info)
+	
+        return body_info_list
+```
