@@ -493,6 +493,17 @@ class AnnualParser:
             'FirstSemesterContactHours',
             'SecondSemesterContactHours'
         ])
+
+class CurriculaProcesser:
+
+	def __init__(self, parser: ParserProtocol, validator: ValidatorProtocol):
+	    self._parser = parser
+            self._validator = validator
+
+	def process(data):
+	    result = self._parser.parse(data)
+            is_valid = self._validator.validate(result)
+	    return result, is_valid
 ```
 
 #### Command
