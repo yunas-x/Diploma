@@ -210,3 +210,58 @@ class QueryFilterRequestAdapter:
                                        in self.get_fields(authorization).json()["field_codes"]]
 		return select_fields(fields_codes_filter)
 ```
+
+#### Proxy
+В данном примере используем для кэширования
+```
+class AuthValidatorProtocol(Protocol):
+        @abstractmethod
+	def validate(session_id: str) -> bool:
+		pass
+
+class AuthValidator(AuthValidatorProtocol):
+	def __init__(self, session_maker: sessionmaker[Session]=SessionMaker):
+		self._session_maker = session_maker
+
+	def validate(session_id: str):
+	    current_time = datetime.utcnow()
+	    two_day_ago = current_time - timedelta(hours=48)
+	    with self._session_maker() as session:
+	        api_session = session \
+	                             .query(ApiSession) \
+	                             .filter(
+	                                     and_(
+	                                          ApiSession.session_id==session_id,
+	                                          ApiSession.created_at > two_day_ago
+	                                     )
+	                             ) \
+	                             .order_by(desc(ApiSession.created_at)) \
+	                             .first()
+	                    
+	    
+	    return ApiSession(
+	                      session_id=session.session_id,
+	                      created_at=session.created_at
+	                     )
+
+class AuthValidatorProxy(AuthValidatorProtocol):
+	def __init__(self, session_maker: sessionmaker[Session]=SessionMaker):
+		self._auth_validator = AuthValidator(session_maker)
+		self._cache = TTLCache(maxsize=10, ttl=360)
+
+	def validate(session_id: str) -> bool:
+		try:
+			session = self._cache[session_id]
+                        current_time = datetime.utcnow()
+			two_day_ago = current_time - timedelta(hours=48)
+			if session.created_at < two_day_ago:
+				return None
+		except KeyError:
+			session = self._auth_validator.validate(session_id)
+			self._cache[session_id] = session
+
+    		return ApiSession(
+	                      	  session_id=session.session_id,
+	                      	  created_at=session.created_at
+	                    	 )
+```
