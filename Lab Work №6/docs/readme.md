@@ -346,10 +346,10 @@ class ParserProtocol(Protocol):
     def parse_headers(self, payload) -> HeaderInfo:
         raise NotImplementedError
 
-    def parse_main_body(self, payload) -> list[BodyRowInfo]:
+    def parse_main_body(self, payload) -> list[RowInfo]:
         raise NotImplementedError
 
-    def convert_to_json(header_info: HeaderInfo, body_info_list: list[BodyRowInfo]) -> dict:
+    def convert_to_json(header_info: HeaderInfo, body_info_list: list[RowInfo]) -> dict:
         raise NotImplementedError
 
 class BasicParser(ParserProtocol):
@@ -428,3 +428,71 @@ class BasicParser(ParserProtocol):
 	
         return body_info_list
 ```
+#### Strategy
+Используется, чтобы выбрать парсер
+
+![plot](./Images/Strategy.png)
+```
+### См. пример выше и приведенный ниже код
+
+class AnnualParser:
+
+    @override
+    def convert_to_json(header_info: HeaderInfo, body_info_list: list[RowInfo]) -> dict:
+        json_dict = {
+		"ProgramInfo": {
+		        "name": header_info.programme_name,
+		        "courses": __get_courses(body_info_list)
+            	 }
+        }
+
+    return json_dict
+
+    @override
+    def parse_header(payload):
+        header_info = HeaderInfo()
+	
+        header_info.programme_name = get_programme_name(payload)
+        return = header_info
+
+    @override
+    def parse_body(self, payload):
+
+        pdf_path = payload
+
+        header_text_list = get_pdf_page_text(pdf_path, 0, True).split("\n")
+        header_text_list = [text.strip() for text in header_text_list if text]
+        
+        df = get_data_frame_by_pdf_path(pdf_path,
+                                        table_settings={"text_x_tolerance": 1, "vertical_strategy": "lines_strict"})
+        df = prepare_table(df)
+        df = get_corrected_df(df)
+
+        programme = get_programme_name(header_text_list)
+        year, enrolled_in = get_year_and_enrolled_in(header_text_list)
+
+        result_table = []
+
+        for row_index, row in df.iterrows():
+            course_name = row['dscpl']
+            department = row['podr']
+            credits = row['cred']
+            first_sem_hours = get_hours(row['hours_mod1']) + get_hours(row['hours_mod2'])
+            second_sem_hours = get_hours(row['hours_mod3']) + get_hours(row['hours_mod4'])
+
+            result_table.append(
+                [course_name, programme, credits, year, department, enrolled_in, first_sem_hours, second_sem_hours])
+
+        return pd.DataFrame(result_table, columns=[
+            'CourseName',
+            'Programme',
+            'Credits',
+            'Year',
+            'Department',
+            'EnrolledIn',
+            'FirstSemesterContactHours',
+            'SecondSemesterContactHours'
+        ])
+```
+
+#### Command
