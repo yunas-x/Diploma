@@ -98,6 +98,29 @@ new_data = copy.deepcopy(data) # копия
 new_data.token = "token"
 ```
 
+#### Singleton
+В данном случае этот паттерн может быть использован, чтобы создать обертку для объекта, отвечающего за доступ к базе данных
+
+![plot](./Images/Singleton.png)
+
+```
+class Connection:
+
+    def __new__(cls):
+        if not hasattr(cls, 'instance'):
+             cls.instance = super(SingletonClass, cls).__new__(cls)
+        return cls.instance
+
+    def __init__(self):
+	SQLALCHEMY_DATABASE_URL = os.getenv('POSTGRES_CONNECTION_STRING')
+	Engine = create_engine(SQLALCHEMY_DATABASE_URL)
+        self._sessionmaker = sessionmaker(autocommit=False, autoflush=False, bind=Engine)
+
+    @property
+    def connection(self):
+	return self._sessionmaker
+```
+
 ### Структурные паттерны
 #### Decorator
 На настоящий момент Decorator в его чистом виде используется редко, вместо это зачастую используют его функциональную альтернативу. Декоратор get оборачивает функцию и корректирует поведение вложенного метода.
