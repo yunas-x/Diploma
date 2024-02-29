@@ -672,7 +672,7 @@ def get_field_codes() -> FieldsResponse:
     fields = fields_from_rows(field_codes_rows)
     return FieldsResponse(field_codes=fields)
 ```
-• <b>Результаты: </b>В бизнес-логике нет многопоточности
+• <b>Результаты: </b>В бизнес-логике нет многопоточности <br/>
 • <b>Связь с другими паттернами: </b>следует принципу разделения ответственности и MVC, отчасти иллюстрирует паттерн Facade <br/>
 
 ### Information Expert
