@@ -36,7 +36,7 @@ class ParserFactory:
 #### Builder
 Используется для поэтапного конструирования запросов к базе данных с помощью ORM, после чего метод all() создает экземпляр запроса, который отправляет в базу данных
 
-[plot](./Images/Builder.png)
+![plot](./Images/Builder.png)
 
 ```
 programs_pre_query = session \
